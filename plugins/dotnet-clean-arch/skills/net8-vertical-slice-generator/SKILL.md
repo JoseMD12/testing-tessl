@@ -22,3 +22,5 @@ Esta habilidade orienta a criação e o scaffolding de novas funcionalidades (fe
      - `public record Command(...) : IRequest<Result>;`
      - `public class Validator : AbstractValidator<Command> { ... }`
      - `public class Handler : IRequestHandler<Command, Result> { ... }`
+6. **Regras de Negócio da Feature (SDD):**
+   - A lógica implementada dentro de cada Handler ou Validator deve seguir estritamente as regras de negócio e critérios de aceitação definidos no arquivo de especificação (`spec-*.md`) da respectiva funcionalidade.

@@ -16,10 +16,6 @@ Cada especificação de caso de uso deve ser definida em um arquivo Markdown no 
 
 As especificações ficam armazenadas na pasta `/specs` ou `/docs/specs` na raiz do projeto.
 
-## Uso pela IA
-
-Antes de implementar qualquer código, você deve ler a especificação da feature correspondente para garantir que todas as regras de negócio e contratos descritos na spec sejam rigorosamente seguidos.
-
 ## Formato Obrigatório de Spec
 
 Cada arquivo de especificação deve seguir rigorosamente o seguinte template:

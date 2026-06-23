@@ -2,6 +2,9 @@
   "name": "MachineReturnProto",
   "mode": "vendored",
   "dependencies": {
+    "machinereturn/sdd-workflow": {
+      "source": "file:plugins/sdd-workflow"
+    },
     "machinereturn/dotnet-clean-arch": {
       "source": "file:plugins/dotnet-clean-arch"
     }

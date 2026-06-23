@@ -18,7 +18,8 @@ Para manter o contexto enxuto, livre de redundâncias e focado no domínio, as r
    - **Higiene do Git:** Regras para `.gitignore` e arquivos temporários de compilação estão em [git-hygiene.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/git-hygiene.md).
 
 2. **Especificações de Desenvolvimento (SDD):**
-   - **Criação e Formato de Specs:** Regras de nomenclatura e templates obrigatórios de especificação estão delegadas à skill [sdd-spec-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/sdd-spec-enforcer/SKILL.md).
+   - **Processo SDD:** A obrigatoriedade de leitura de especificações antes do início da codificação está descrita em [spec-driven-development.md](.tessl/plugins/machinereturn/sdd-workflow/rules/spec-driven-development.md).
+   - **Criação e Formato de Specs:** Regras de nomenclatura e templates obrigatórios de especificação estão delegadas à skill [sdd-spec-enforcer](.tessl/plugins/machinereturn/sdd-workflow/skills/sdd-spec-enforcer/SKILL.md).
 
 3. **Arquitetura e Implementação:**
    - **Domínio Rico (DDD):** Diretrizes para Aggregate Roots, Entities e Value Objects estão na skill [rich-domain-builder](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/rich-domain-builder/SKILL.md).

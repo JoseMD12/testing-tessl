@@ -7,7 +7,8 @@ description: Ativado ao gerar testes de unidade para entidades do Domain ou hand
 
 Esta habilidade orienta a criação de testes unitários rápidos, isolados e focados nas regras de negócios expostas no Domain e Application.
 
-## Diretrizes de Testes Unitários:
+## Diretrizes de Testes Unitários
+
 1. **Estrutura e Nomenclatura:**
    - Use o padrão AAA (Arrange, Act, Assert).
    - Nomeie os métodos de teste de forma semântica, descrevendo o comportamento esperado: `Deve_LancarExcecao_Quando_ChamadoJaFinalizado` ou `Should_TransitionToEmTransito_When_ShipmentDispatched`.

@@ -8,16 +8,20 @@ description: Triggered when managing, creating or validating feature specificati
 Cada caso de uso (feature) do sistema deve ser guiado por especificações documentadas. Siga rigorosamente as diretrizes abaixo:
 
 ## Nomenclatura das Specs
+
 Cada especificação de caso de uso deve ser definida em um arquivo Markdown no formato:
 `spec-<dominio/contexto>-<numero_feature>-<nome_feature>.md` (ex: `spec-machine-returns-01-abrir-chamado.md`).
 
 ## Localização
+
 As especificações ficam armazenadas na pasta `/specs` ou `/docs/specs` na raiz do projeto.
 
 ## Uso pela IA
+
 Antes de implementar qualquer código, você deve ler a especificação da feature correspondente para garantir que todas as regras de negócio e contratos descritos na spec sejam rigorosamente seguidos.
 
 ## Formato Obrigatório de Spec
+
 Cada arquivo de especificação deve seguir rigorosamente o seguinte template:
 
 ```markdown

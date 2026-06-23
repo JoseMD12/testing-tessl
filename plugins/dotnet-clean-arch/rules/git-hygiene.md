@@ -2,7 +2,8 @@
 
 Manutenção de higiene de arquivos no Git para o ecossistema .NET.
 
-## Regras do Git:
+## Regras do Git
+
 - **Exclusões no .gitignore:** Garanta que todos os arquivos temporários, de compilação ou de runtime não sejam commitados.
 - **Pastas do Compilador .NET:** Excluir recursivamente pastas `bin/` e `obj/`.
 - **Arquivos e Pastas de IDEs/Editores:** Excluir configurações específicas de usuário e pastas como `.vs/`, `.idea/`, arquivos `.user`.

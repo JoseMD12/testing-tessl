@@ -7,7 +7,8 @@ description: Ativado ao definir ou modificar Aggregate Roots, Entities ou Value 
 
 Esta habilidade orienta a definição, escrita e validação de entidades de domínio ricas no padrão DDD (Domain-Driven Design), garantindo encapsulamento correto e evitando modelos anêmicos.
 
-## Diretrizes do Domínio:
+## Diretrizes do Domínio
+
 1. **Modelos Ricos (Rich Domain Models):**
    - Evite classes anêmicas compostas apenas por propriedades com getters e setters públicos automáticos (`{ get; set; }`).
    - Propriedades devem ter setters privados ou protegidos (`{ get; private set; }`).

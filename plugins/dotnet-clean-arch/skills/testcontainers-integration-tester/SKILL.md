@@ -7,7 +7,8 @@ description: Ativado ao configurar ou modificar testes de integração de banco 
 
 Esta habilidade orienta a criação e manutenção de testes de integração de ponta a ponta que utilizam instâncias de banco de dados e cache reais e efêmeras.
 
-## Diretrizes de Testes de Integração:
+## Diretrizes de Testes de Integração
+
 1. **Stack de Integração:**
    - **Banco de Dados:** PostgreSQL instanciado via Testcontainers.
    - **Cache:** Redis instanciado via Testcontainers.

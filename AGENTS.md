@@ -18,10 +18,12 @@ Para manter o contexto enxuto, livre de redundâncias e focado no domínio, as r
    - **Higiene do Git:** Regras para `.gitignore` e arquivos temporários de compilação estão em [git-hygiene.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/git-hygiene.md).
 
 2. **Especificações de Desenvolvimento (SDD):**
+
    - **Processo SDD:** A obrigatoriedade de leitura de especificações antes do início da codificação está descrita em [spec-driven-development.md](.tessl/plugins/machinereturn/sdd-workflow/rules/spec-driven-development.md).
    - **Criação e Formato de Specs:** Regras de nomenclatura e templates obrigatórios de especificação estão delegadas à skill [sdd-spec-enforcer](.tessl/plugins/machinereturn/sdd-workflow/skills/sdd-spec-enforcer/SKILL.md).
 
 3. **Arquitetura e Implementação:**
+   - **Estrutura da Solução:** A nomenclatura de projetos .csproj, .sln e dependências de arquitetura está descrita em [solution-structure.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/solution-structure.md).
    - **Domínio Rico (DDD):** Diretrizes para Aggregate Roots, Entities e Value Objects estão na skill [rich-domain-builder](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/rich-domain-builder/SKILL.md).
    - **Fatias Verticais (Vertical Slices):** Padrões para rotas da API, Command/Query Handlers e FluentValidation estão na skill [net8-vertical-slice-generator](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/net8-vertical-slice-generator/SKILL.md).
    - **Mapeamento e Migrações (EF Core):** Regras de configuração Fluent API e geração de migrações estão na skill [efcore-config-migration-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/efcore-config-migration-enforcer/SKILL.md).
@@ -29,7 +31,7 @@ Para manter o contexto enxuto, livre de redundâncias e focado no domínio, as r
 
 4. **Estratégia de Testes:**
    - **Testes Unitários:** O isolamento e a modelagem com xUnit, Moq e FluentAssertions estão na skill [xunit-moq-fluentassertions-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/xunit-moq-fluentassertions-tester/SKILL.md).
-   - **Testes de Integração:** O uso de Testcontainers (PostgreSQL e Redis) com xUnit e FluentAssertions está na skill [testcontainers-integration-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).
+   - **Testes de Integração:** O uso de Testcontainers (PostgreSQL e Redis) com xUnit e FluentAssertions está na skill [testcontainers-integration-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).
 
 Antes de codificar qualquer nova funcionalidade, localize e leia a especificação correspondente (`spec-*.md`) no diretório `/specs` ou `/docs/specs`.
 
@@ -87,7 +89,7 @@ O projeto é estruturado utilizando conceitos de **Clean Architecture** combinad
 ### 💾 Banco de Dados, Cache e Configurações Locais
 
 - **Banco de Dados e Cache:** Utiliza PostgreSQL (persistência de escrita) e Redis (cache distribuído).
-   - *Diretriz:* Consulte a skill [redis-cache-manager](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/redis-cache-manager/SKILL.md) para detalhes de gerenciamento de chaves e resiliência com Redis.
+  - *Diretriz:* Consulte a skill [redis-cache-manager](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/redis-cache-manager/SKILL.md) para detalhes de gerenciamento de chaves e resiliência com Redis.
 - **Orquestração Local:** A infraestrutura local é orquestrada via `docker-compose.yml` e arquivos `Dockerfile`.
 - **Dados Iniciais (Seeds):** Carga automática no banco de dados para criar um usuário administrador padrão (`admin`).
 - **Migrações (EF Core):** As migrações residem na camada `Infra` e devem ser aplicadas automaticamente na inicialização da API em desenvolvimento, conforme detalhado na skill [efcore-config-migration-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/efcore-config-migration-enforcer/SKILL.md).

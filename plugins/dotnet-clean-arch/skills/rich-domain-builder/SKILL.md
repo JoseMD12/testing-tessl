@@ -14,13 +14,15 @@ Esta habilidade orienta a definição, escrita e validação de entidades de dom
    - Propriedades devem ter setters privados ou protegidos (`{ get; private set; }`).
    - Mudanças de estado devem ocorrer exclusivamente por meio de métodos de negócios explícitos (ex: `AlterarStatus(Status status)`, `RegistrarLaudo(...)`).
 2. **Aggregate Roots (Raízes de Agregado):**
-   - Controle a consistência e integridade das invariantes do grupo de entidades.
-   - Exemplo: `ChamadoDevolucao` gerencia as transições de status (`Aberto` -> `EmTransito` -> `Recebido` -> `Inspecionado` -> `Finalizado`) e o cálculo da fábrica de destino.
+   - Controle a consistência e integridade das invariantes de todo o grupo de entidades sob sua raiz.
+   - Exemplo: Uma raiz de agregado controla as mudanças de estado e as regras de transição de ciclo de vida de suas entidades internas, garantindo que o objeto nunca entre em estado inválido.
 3. **Entities (Entidades):**
-   - Objetos com uma identidade única persistente. Exemplo: `Maquina`, `Usuario`, `Fabrica`.
+   - Objetos com uma identidade única e contínua ao longo do tempo (possuem ID de entidade).
 4. **Value Objects (Objetos de Valor):**
-   - Objetos imutáveis definidos por seus atributos, sem identidade própria (ex: `SeloQualidade`, `SerialNumber`, `EmailAddress`).
+   - Objetos imutáveis definidos unicamente por seus atributos, sem identidade própria.
    - Devem estender uma classe base `ValueObject` comum que implementa a igualdade estrutural.
-5. **Validações e Exceções de Domínio:**
-   - Valide as regras de negócio nas próprias entidades e Value Objects.
-   - Lance `DomainException` quando uma regra de negócio for violada.
+5. **Validações de Domínio:**
+   - Execute as validações de consistência e invariantes diretamente nas entidades e Value Objects.
+   - Lance uma exceção de domínio (ex: `DomainException`) caso alguma regra descrita na especificação correspondente seja violada.
+6. **Fonte de Regras de Negócio (SDD):**
+   - As regras de negócio específicas (como condições de transição, limites e cálculos) devem ser extraídas exclusivamente dos arquivos de especificação (`spec-*.md`). Não defina ou infira regras de negócio com base em diretrizes desta skill.

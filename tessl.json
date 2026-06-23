@@ -1,0 +1,9 @@
+{
+  "name": "MachineReturnProto",
+  "mode": "vendored",
+  "dependencies": {
+    "machinereturn/dotnet-clean-arch": {
+      "source": "file:plugins/dotnet-clean-arch"
+    }
+  }
+}

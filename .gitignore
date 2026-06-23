@@ -1,0 +1,89 @@
+# ==========================================
+# gitignore para MachineReturnProto (.NET 8)
+# ==========================================
+
+# ------------------------------------------
+# 1. Compilação e Artefatos do .NET
+# ------------------------------------------
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+PublishOutput/
+publish/
+**/bin/
+**/obj/
+
+# Arquivos de preferências e estados de usuário
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+
+# Relatórios e resultados de testes
+TestResults/
+*.trx
+*.coverlet.info
+**/TestResults/
+
+# Cache do MSBuild e Roslyn
+.msbuild/
+.vs/
+.history/
+
+# ------------------------------------------
+# 2. Ferramentas de Desenvolvimento / IDEs
+# ------------------------------------------
+
+# Tessl
+.tessl/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+
+# Mac / Windows arquivos temporários
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ------------------------------------------
+# 3. Configurações Locais e Segredos
+# ------------------------------------------
+# Arquivos de configurações locais de desenvolvimento (evitar subir credenciais)
+appsettings.Local.json
+appsettings.Development.local.json
+*.local.json
+secrets.json
+.env
+
+# ------------------------------------------
+# 4. Docker, Bancos de Dados e Volumes Locais (PostgreSQL & Redis)
+# ------------------------------------------
+# Logs de containers e volumes de dados locais do Docker para evitar commit de bancos reais
+**/pg-data/
+**/postgres-data/
+**/redis-data/
+**/db-data/
+**/data/pg/
+**/data/redis/
+.docker/
+docker-compose.override.yml
+
+# ------------------------------------------
+# 5. Logs e Arquivos Temporários
+# ------------------------------------------
+*.log
+*.tmp
+*.bak
+*.swp
+*.cache

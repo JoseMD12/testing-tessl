@@ -8,23 +8,39 @@ Este projeto segue uma abordagem AI-Native combinada com SDD (Schema/Spec Driven
 
 ---
 
-### 🧭 Roteamento de Instruções para Agentes de IA
+### 🧭 Roteamento de Diretrizes (Hub de IA)
 
-Para manter o contexto enxuto e livre de redundâncias, as diretrizes de desenvolvimento deste repositório foram modularizadas:
+Para manter o contexto enxuto, livre de redundâncias e focado no domínio, as regras e habilidades de desenvolvimento deste repositório foram totalmente modularizadas. Consulte os links abaixo antes de realizar qualquer tarefa específica:
 
-1. **Aprovação de Terminal e Comandos:** As restrições de execução e segurança estão descritas na regra do Tessl em [terminal-approval-flow.md](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/plugins/dotnet-clean-arch/rules/terminal-approval-flow.md).
-2. **Formato e Criação de Specs (SDD):** As diretrizes de nomenclatura e templates obrigatórios de especificação estão delegadas à skill do Tessl [SKILL.md](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/plugins/dotnet-clean-arch/skills/sdd-spec-enforcer/SKILL.md).
-3. **Outras Habilidades Técnicas:** Habilidades específicas para gerar testes unitários (xUnit/Moq), testes de integração (Testcontainers) e fatias verticais estão configuradas nos plugins locais do Tessl (verifique [tessl.json](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/tessl.json)).
+1. **Segurança e Operação:**
+   - **Aprovação de Comandos:** As restrições de execução e segurança no terminal estão descritas em [terminal-approval-flow.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/terminal-approval-flow.md).
+   - **Gestão de Segredos:** Diretrizes para proteção de credenciais e uso de secrets locais estão em [secret-management.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/secret-management.md).
+   - **Higiene do Git:** Regras para `.gitignore` e arquivos temporários de compilação estão em [git-hygiene.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/git-hygiene.md).
+
+2. **Especificações de Desenvolvimento (SDD):**
+   - **Criação e Formato de Specs:** Regras de nomenclatura e templates obrigatórios de especificação estão delegadas à skill [sdd-spec-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/sdd-spec-enforcer/SKILL.md).
+
+3. **Arquitetura e Implementação:**
+   - **Domínio Rico (DDD):** Diretrizes para Aggregate Roots, Entities e Value Objects estão na skill [rich-domain-builder](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/rich-domain-builder/SKILL.md).
+   - **Fatias Verticais (Vertical Slices):** Padrões para rotas da API, Command/Query Handlers e FluentValidation estão na skill [net8-vertical-slice-generator](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/net8-vertical-slice-generator/SKILL.md).
+   - **Mapeamento e Migrações (EF Core):** Regras de configuração Fluent API e geração de migrações estão na skill [efcore-config-migration-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/efcore-config-migration-enforcer/SKILL.md).
+   - **Estratégias de Cache (Redis):** Diretrizes para o padrão Cache-Aside e gerenciamento de chaves no Redis estão na skill [redis-cache-manager](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/redis-cache-manager/SKILL.md).
+
+4. **Estratégia de Testes:**
+   - **Testes Unitários:** O isolamento e a modelagem com xUnit, Moq e FluentAssertions estão na skill [xunit-moq-fluentassertions-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/xunit-moq-fluentassertions-tester/SKILL.md).
+   - **Testes de Integração:** O uso de Testcontainers (PostgreSQL e Redis) com xUnit e FluentAssertions está na skill [testcontainers-integration-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).
 
 Antes de codificar qualquer nova funcionalidade, localize e leia a especificação correspondente (`spec-*.md`) no diretório `/specs` ou `/docs/specs`.
 
 ---
 
 ### 🏢 Tema de Domínio: MachineReturn (Logística Reversa de Máquinas Corporativas)
+
 Sistema de gerenciamento de devolução de máquinas corporativas por fim de contrato ou defeito, integrando triagem automática de destino e inspeção de qualidade de hardware.
 
-#### Fluxo de Negócio e Personas:
-1. **Abertura de Chamado (Consumidor - Sem Login):** 
+#### Fluxo de Negócio e Personas
+
+1. **Abertura de Chamado (Consumidor - Sem Login):**
    - Um consumidor abre um chamado de devolução informando apenas o **código da máquina** e o **e-mail** associado a ela.
    - O sistema valida se o e-mail corresponde ao usuário atualmente atribuído à máquina.
    - A devolução é motivada por: **Tempo de Aluguel Expirado** ou **Produto com Erro**.
@@ -35,14 +51,16 @@ Sistema de gerenciamento de devolução de máquinas corporativas por fim de con
    - Ele define o **Selo de Qualidade** da máquina: `Novo`, `UsadoEmBoasCondicoes`, `Usado`, `NecessitaManutencao`, `Desmontar`, `Descartar`.
    - Com base no selo e nas regras, o agente decide o destino operacional da máquina.
 
-#### Entidades do Domínio (Classes Ricas):
+#### Entidades do Domínio (Classes Ricas)
+
 - **Usuario e Perfil:** Perfis como `Consumidor` (sem acesso de login ao sistema) e `AgenteQualidade` (com login).
 - **Maquina:** Código único, número de série, ano de fabricação, país de origem, usuário atribuído atual e histórico de selos de qualidade.
 - **ChamadoDevolucao:** Ciclo de vida (`Aberto`, `EmTransito`, `Recebido`, `Inspecionado`, `Finalizado`), motivo do chamado, fábrica de destino e histórico de tramitação.
 - **Fabrica:** Nome, país e capacidade operacional.
 - **LaudoQualidade:** Resultado da averiguação do Agente de Qualidade contendo o selo atribuído e o parecer técnico.
 
-#### Regra de Roteamento (Exemplo):
+#### Regra de Roteamento (Exemplo)
+
 - **Fábrica de Destino:**
   - Máquinas com **origem** fora das Américas e **ano de fabricação** menor que 2021 são direcionadas para a Fábrica de Descarte Internacional.
   - Máquinas com **motivo** "Produto com Erro" e **número de série** iniciado com "CN" vão para a Fábrica de Manutenção Avançada.
@@ -50,58 +68,45 @@ Sistema de gerenciamento de devolução de máquinas corporativas por fim de con
 ---
 
 ### 🏛️ Arquitetura do Sistema
-O projeto é dividido em módulos estruturados combinando conceitos de **Clean Architecture** e **Vertical Slice Architecture**:
 
-1. **Domain:**
-   - Contém a lógica central de negócio (Entidades, Agregados, Objetos de Valor) e regras corporativas.
-   - **Regra:** Seguir os padrões do **Domain-Driven Design (DDD)** e **Classes Ricas** (encapsulamento de comportamento de mudança de estado e validações):
-     - **Aggregate Roots:** Ponto de entrada do agregado que garante a consistência das invariantes (ex: `ChamadoDevolucao` controlando a tramitação).
-     - **Entities:** Objetos com identidade única que persiste ao longo do tempo (ex: `Maquina`, `Usuario`, `Fabrica`).
-     - **Value Objects:** Objetos imutáveis definidos pelos seus atributos e sem identidade própria (ex: `SeloQualidade`, `SerialNumber`, `EmailAddress`).
-     - Evitar modelos anêmicos (apenas com get/set públicos) para facilitar a testabilidade.
-2. **Application:**
-   - Orquestra os casos de uso da aplicação.
-   - **Regra:** Dividido por **Vertical Slices** (Features). Cada feature encapsula seu request, handler, lógica de validação específica e resposta no mesmo escopo/módulo.
-3. **Infra:**
-   - Implementação de acesso a dados (PostgreSQL via Entity Framework Core ou Dapper), persistência e infraestrutura de Cache (Redis).
-   - Integrações externas e configurações de infraestrutura.
-4. **API:**
-   - Ponto de entrada da aplicação (.NET 8 Minimal APIs ou Controllers).
-   - Mapeamento de rotas e contratos de Request/Response expostos.
-5. **Shared:**
-   - Tratamento global de erros (Error/Exception Handling Middleware).
-   - **Regra:** Deve conter o middleware global de exceção que captura exceções de domínio/negócio (ex: `DomainException`) e as mapeia para respostas HTTP semânticas (ex: `400 Bad Request`, `422 Unprocessable Entity`), evitando blocos try-catch manuais na camada de API.
-   - Respostas de erro padronizadas e classes utilitárias compartilhadas entre os projetos.
+O projeto é estruturado utilizando conceitos de **Clean Architecture** combinados com **Vertical Slice Architecture** distribuídos nas seguintes camadas:
+
+1. **Domain:** Contém as entidades ricas do negócio, agregados e objetos de valor.
+   - *Diretriz:* Siga a skill [rich-domain-builder](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/rich-domain-builder/SKILL.md) para encapsulamento das invariantes e validações.
+2. **Application:** Orquestra os casos de uso do sistema por fatias verticais (features).
+   - *Diretriz:* Siga a skill [net8-vertical-slice-generator](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/net8-vertical-slice-generator/SKILL.md).
+3. **Infra:** Implementa a persistência de dados (PostgreSQL via EF Core) e infraestrutura de cache (Redis).
+   - *Diretriz:* Siga a skill [efcore-config-migration-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/efcore-config-migration-enforcer/SKILL.md) para mapeamento Fluent API e criação de migrações.
+   - *Diretriz:* Siga a skill [redis-cache-manager](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/redis-cache-manager/SKILL.md) para cache distribuído e estratégias de invalidação.
+4. **API:** Camada de entrada (Minimal APIs/Controllers) que expõe os endpoints das fatias verticais.
+5. **Shared:** Contém o middleware de tratamento global de exceções para conversão semântica de erros (ex: `DomainException` -> HTTP 400/422).
 
 ---
 
-### 💾 Banco de Dados, Cache e Configurações
-- **Escrita:** PostgreSQL.
-- **Cache:** Redis.
-- **Orquestração local:** O projeto deve conter um `docker-compose.yml` e arquivos `Dockerfile` configurados para subir a aplicação e suas dependências locais de forma rápida.
-- **Dados Iniciais (Seeds):** Deve existir uma carga inicial (seed) automática de banco para cadastrar um Usuário Administrador padrão (`admin`) com o perfil de administrador correspondente.
-- **Configurações e Segredos:** Todas as credenciais de banco, portas de Redis e dados sensíveis de seed devem ser lidas a partir de variáveis de ambiente no Docker/Produção e utilizando **User Secrets** do .NET (`dotnet user-secrets`) durante o desenvolvimento local. Nunca expor segredos no repositório.
-- **EF Core Migrations:** A geração de migrações e o contexto do banco de dados devem residir na camada `Infra`. As migrações pendentes devem ser aplicadas automaticamente na inicialização da aplicação em ambiente de desenvolvimento local.
-- **Resiliência e Políticas de Retry:** Configurar políticas de resiliência e tentativas de conexão (como `EnableRetryOnFailure` do EF Core para o PostgreSQL) para evitar falhas na inicialização caso a aplicação suba enquanto os containers de banco de dados ou Redis ainda estejam iniciando.
+### 💾 Banco de Dados, Cache e Configurações Locais
+
+- **Banco de Dados e Cache:** Utiliza PostgreSQL (persistência de escrita) e Redis (cache distribuído).
+   - *Diretriz:* Consulte a skill [redis-cache-manager](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/redis-cache-manager/SKILL.md) para detalhes de gerenciamento de chaves e resiliência com Redis.
+- **Orquestração Local:** A infraestrutura local é orquestrada via `docker-compose.yml` e arquivos `Dockerfile`.
+- **Dados Iniciais (Seeds):** Carga automática no banco de dados para criar um usuário administrador padrão (`admin`).
+- **Migrações (EF Core):** As migrações residem na camada `Infra` e devem ser aplicadas automaticamente na inicialização da API em desenvolvimento, conforme detalhado na skill [efcore-config-migration-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/efcore-config-migration-enforcer/SKILL.md).
+- **Resiliência:** Configure políticas de retry como `EnableRetryOnFailure` do EF Core para o PostgreSQL, tolerando atrasos de inicialização dos containers.
+- **Segredos e Configurações:** Siga estritamente a regra de segurança descrita em [secret-management.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/secret-management.md).
 
 ---
 
 ### 🧪 Estratégia de Testes
-Toda feature desenvolvida deve ser acompanhada de:
-1. **Testes Unitários:** Focados em testar isoladamente as regras de negócio expostas no Domain e Application.
-   - **Regra:** Cada seção de domínio ou Aggregate Root deve ter seus próprios arquivos de testes unitários dedicados.
-   - **Isolamento e Mocks:** Devem ser totalmente isolados de dependências externas. Utilizar frameworks de Mock (como NSubstitute ou Moq) para simular comportamentos de repositórios, serviços e componentes externos.
-2. **Testes de Integração:** Devem testar o fluxo de ponta a ponta.
-   - **Regra:** Utilizar **Testcontainers** para criar instâncias reais e efêmeras de PostgreSQL e Redis durante a execução dos testes de integração, garantindo isolamento e fidelidade aos ambientes reais.
-   - **Isolamento de Banco:** Cada classe de teste ou execução de fluxo de integração deve possuir e rodar em seu próprio banco de dados e contexto isolados, garantindo que não haja poluição de estado entre os testes executados.
+
+Toda nova funcionalidade criada deve conter testes correspondentes para garantir qualidade de ponta a ponta:
+
+1. **Testes Unitários:** Focados na lógica do Domain e Application de forma isolada.
+   - *Diretriz:* Siga a skill [xunit-moq-fluentassertions-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/xunit-moq-fluentassertions-tester/SKILL.md).
+2. **Testes de Integração:** Fluxos ponta a ponta em banco e cache reais e efêmeros.
+   - *Diretriz:* Siga a skill [testcontainers-integration-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).
 
 ---
 
 ### 📞 Testes Manuais (Arquivos `.http`)
-- Para facilitar testes rápidos da API sem a necessidade de ferramentas externas (como Postman), arquivos com extensão `.http` devem ser criados na camada de API ou em uma pasta dedicada `/requests` na raiz do projeto.
-- **Regra:** Cada seção de domínio ou Aggregate Root deve ter seu próprio arquivo `.http` individual (ex: `requests/machine-returns.http`) para manter os testes manuais focados por contexto.
 
----
-
-### 📦 Padrões de Arquivos e Git
-- **.gitignore:** Deve ser mantido limpo e atualizado com as pastas geradas pelo ecossistema do .NET (`bin/`, `obj/`, `.vs/`, `.idea/`, arquivos `.user`, segredos locais de desenvolvimento e configurações sensíveis).
+- Para testes manuais rápidos na API, crie arquivos com extensão `.http` na camada de API ou no diretório `/requests` na raiz do projeto.
+- **Regra:** Crie um arquivo `.http` individual para cada seção de domínio ou Aggregate Root (ex: `requests/machine-returns.http`) para manter os testes focados por contexto.

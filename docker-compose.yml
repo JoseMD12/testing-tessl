@@ -8,6 +8,7 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME:-machinereturn}
+      POSTGRES_HOST_AUTH_METHOD: ${DB_AUTH_METHOD:-trust}
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:

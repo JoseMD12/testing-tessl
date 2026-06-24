@@ -45,3 +45,17 @@ graph TD
 ```
 
 **Regra Absoluta:** Nunca adicione referências cíclicas ou diretas que contornem essa estrutura (ex: referenciar `API` dentro do `Domain`, ou expor dependências de banco de dados do `Infra` diretamente na camada de `Application`).
+
+## Definições Específicas do Projeto (Alinhamento MR-4)
+
+Ficou acordado para a materialização física da solução:
+
+- **Nome da Solução:** `MachineReturn.sln` (localizado na raiz do repositório).
+- **Estrutura de Diretórios:**
+  - Código de Produção: Alocado sob `/src` (ex: `/src/MachineReturn.Domain`).
+  - Código de Testes: Alocado sob `/tests` (ex: `/tests/MachineReturn.Domain.UnitTests`).
+- **Arquitetura da API:** Utilização estrita de **Minimal APIs nativas do .NET 8** no projeto `MachineReturn.API` para favorecer o isolamento de fatias verticais.
+- **Ambiente de Desenvolvimento Local (Docker Compose):**
+  - PostgreSQL na porta padrão `5432`.
+  - Redis na porta padrão `6379`.
+  - Chaves confidenciais e credenciais locais gerenciadas via `.NET User Secrets` (com valores de desenvolvimento em `appsettings.Development.json`).

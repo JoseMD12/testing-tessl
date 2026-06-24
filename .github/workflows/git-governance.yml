@@ -1,0 +1,48 @@
+name: Git Governance
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    name: Git Governance Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Branch Merges and Naming
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+        shell: bash
+        run: |
+          echo "Base branch (target): $BASE_BRANCH"
+          echo "Head branch (source): $HEAD_BRANCH"
+
+          # Check 1: Block direct merges to main if not from develop
+          if [ "$BASE_BRANCH" = "main" ] && [ "$HEAD_BRANCH" != "develop" ]; then
+            echo "::error::Direct merges to 'main' are only allowed from 'develop'. Current source branch is '$HEAD_BRANCH'."
+            exit 1
+          fi
+
+          # Check 2: Validate branch naming pattern via Regex
+          # Skip naming check for 'develop' and 'main' branches (standard integration branches)
+          if [ "$HEAD_BRANCH" = "develop" ] || [ "$HEAD_BRANCH" = "main" ]; then
+            echo "Skipping branch naming check for standard integration branch: $HEAD_BRANCH"
+          else
+            # Pattern: ^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z][a-z0-9]*(-[a-z0-9]+)*$
+            REGEX="^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+            if [[ ! "$HEAD_BRANCH" =~ $REGEX ]]; then
+              echo "::error::Branch name '$HEAD_BRANCH' does not follow the required naming pattern: ^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+              echo "::error::Example of valid branch: feat/MR-123-create-return-request"
+              exit 1
+            fi
+          fi
+
+          echo "All governance checks passed successfully!"

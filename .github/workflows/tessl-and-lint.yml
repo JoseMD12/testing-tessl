@@ -1,0 +1,53 @@
+name: Quality and Tessl Validation
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint, Secrets Scan, and Tessl Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install and Run markdownlint
+        run: |
+          npm install -g markdownlint-cli
+          # Find matching files recursively to avoid glob mismatch error if specs folder does not exist yet
+          FILES=$(find specs plugins -name "*.md" 2>/dev/null || true)
+          markdownlint --disable MD013 -- $FILES AGENTS.md
+
+      - name: Run Setup Script
+        run: |
+          chmod +x ./scripts/setup.sh
+          ./scripts/setup.sh
+
+
+      - name: Tessl Install and Diagnostics
+        run: |
+          tessl install
+          tessl doctor

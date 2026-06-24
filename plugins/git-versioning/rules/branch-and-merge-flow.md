@@ -16,14 +16,14 @@ Onde:
 
 - **operacao:** Tipo da operação realizada. Use prefixos curtos e consistentes, por exemplo: `feat` (nova funcionalidade), `fix` (correção), `refac` (refatoração), `doc` (documentação), `test` (testes), `chore` (manutenção).
 - **ticket:** Identificador do ticket/issue relacionado (ex: `MR-123`). Caso não exista um ticket formal, utilize um identificador descritivo curto.
-- **descricao geral:** Resumo curto do que será feito na branch, em *kebab-case* e sem acentos.
+- **descricao geral:** Resumo curto do que será feito na branch, escrito **obrigatoriamente em inglês**, em *kebab-case* e sem acentos.
 
 Exemplos válidos:
 
-- Conceitual `feat/MR-123 - abertura de chamado de devolucao` resulta na branch `feat/MR-123-abertura-de-chamado-de-devolucao`.
-- `fix/MR-204-corrige-validacao-de-email-do-consumidor`
-- `refac/MR-310-extrai-regra-de-triagem-de-fabrica`
-- `doc/MR-045-documenta-fluxo-de-inspecao-de-qualidade`
+- Conceitual `feat/MR-123 - create return request` resulta na branch `feat/MR-123-create-return-request`.
+- `fix/MR-204-fix-consumer-email-validation`
+- `refac/MR-310-refactor-factory-triage-rules`
+- `doc/MR-045-document-quality-inspection-flow`
 
 ## Fluxo de Integração (Merge)
 

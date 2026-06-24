@@ -1,0 +1,40 @@
+name: Git Governance
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  governance:
+    name: Git Governance Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate Branch Merges and Naming
+        shell: bash
+        run: |
+          BASE_BRANCH="${{ github.base_ref }}"
+          HEAD_BRANCH="${{ github.head_ref }}"
+
+          echo "Base branch (target): $BASE_BRANCH"
+          echo "Head branch (source): $HEAD_BRANCH"
+
+          # Check 1: Block direct merges to main if not from develop
+          if [ "$BASE_BRANCH" = "main" ] && [ "$HEAD_BRANCH" != "develop" ]; then
+            echo "::error::Direct merges to 'main' are only allowed from 'develop'. Current source branch is '$HEAD_BRANCH'."
+            exit 1
+          fi
+
+          # Check 2: Validate branch naming pattern via Regex
+          # Pattern: ^(feat|fix|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$
+          REGEX="^(feat|fix|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$"
+          if [[ ! "$HEAD_BRANCH" =~ $REGEX ]]; then
+            echo "::error::Branch name '$HEAD_BRANCH' does not follow the required naming pattern: ^(feat|fix|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$"
+            echo "::error::Example of valid branch: feat/MR-123-abertura-de-chamado-de-devolucao"
+            exit 1
+          fi
+
+          echo "All governance checks passed successfully!"

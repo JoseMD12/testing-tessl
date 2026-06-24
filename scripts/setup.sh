@@ -47,7 +47,7 @@ else
 fi
 
 # 2. Tessl CLI
-if command -v tessl >/dev/null 2>&1 && [ "$(tessl --version 2>/dev/null | head -1 | tr -d '[:space:]')" = "$TESSL_VERSION" ]; then
+if command -v tessl >/dev/null 2>&1 && tessl --version 2>/dev/null | grep -qF "$TESSL_VERSION"; then
   echo "Tessl CLI ${TESSL_VERSION} already present, skipping."
 else
   echo "Installing Tessl CLI ${TESSL_VERSION}..."

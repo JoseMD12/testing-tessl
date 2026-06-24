@@ -15,21 +15,25 @@ Para manter o contexto enxuto, livre de redundâncias e focado no domínio, as r
 1. **Segurança e Operação:**
    - **Aprovação de Comandos:** As restrições de execução e segurança no terminal estão descritas em [terminal-approval-flow.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/terminal-approval-flow.md).
    - **Gestão de Segredos:** Diretrizes para proteção de credenciais e uso de secrets locais estão em [secret-management.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/secret-management.md).
-   - **Higiene do Git:** Regras para `.gitignore` e arquivos temporários de compilação estão em [git-hygiene.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/git-hygiene.md).
 
-2. **Especificações de Desenvolvimento (SDD):**
+2. **Versionamento de Código (Git):**
+   - **Nomenclatura de Branches e Fluxo de Merge:** Regras para nomear branches (`<operacao>/<ticket> - <descricao>`) e para o fluxo de integração (branches integram na `develop`; `develop` integra na `main` somente com aprovação do responsável) estão em [branch-and-merge-flow.md](.tessl/plugins/machinereturn/git-versioning/rules/branch-and-merge-flow.md).
+   - **Higiene do Git:** Regras para `.gitignore` e arquivos temporários de compilação estão em [git-hygiene.md](.tessl/plugins/machinereturn/git-versioning/rules/git-hygiene.md).
+   - **Operação de Versionamento:** O passo a passo de criação de branch, commits e merge está na skill [git-workflow-manager](.tessl/plugins/machinereturn/git-versioning/skills/git-workflow-manager/SKILL.md).
+
+3. **Especificações de Desenvolvimento (SDD):**
 
    - **Processo SDD:** A obrigatoriedade de leitura de especificações antes do início da codificação está descrita em [spec-driven-development.md](.tessl/plugins/machinereturn/sdd-workflow/rules/spec-driven-development.md).
    - **Criação e Formato de Specs:** Regras de nomenclatura e templates obrigatórios de especificação estão delegadas à skill [sdd-spec-enforcer](.tessl/plugins/machinereturn/sdd-workflow/skills/sdd-spec-enforcer/SKILL.md).
 
-3. **Arquitetura e Implementação:**
+4. **Arquitetura e Implementação:**
    - **Estrutura da Solução:** A nomenclatura de projetos .csproj, .sln e dependências de arquitetura está descrita em [solution-structure.md](.tessl/plugins/machinereturn/dotnet-clean-arch/rules/solution-structure.md).
    - **Domínio Rico (DDD):** Diretrizes para Aggregate Roots, Entities e Value Objects estão na skill [rich-domain-builder](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/rich-domain-builder/SKILL.md).
    - **Fatias Verticais (Vertical Slices):** Padrões para rotas da API, Command/Query Handlers e FluentValidation estão na skill [net8-vertical-slice-generator](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/net8-vertical-slice-generator/SKILL.md).
    - **Mapeamento e Migrações (EF Core):** Regras de configuração Fluent API e geração de migrações estão na skill [efcore-config-migration-enforcer](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/efcore-config-migration-enforcer/SKILL.md).
    - **Estratégias de Cache (Redis):** Diretrizes para o padrão Cache-Aside e gerenciamento de chaves no Redis estão na skill [redis-cache-manager](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/redis-cache-manager/SKILL.md).
 
-4. **Estratégia de Testes:**
+5. **Estratégia de Testes:**
    - **Testes Unitários:** O isolamento e a modelagem com xUnit, Moq e FluentAssertions estão na skill [xunit-moq-fluentassertions-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/xunit-moq-fluentassertions-tester/SKILL.md).
    - **Testes de Integração:** O uso de Testcontainers (PostgreSQL e Redis) com xUnit e FluentAssertions está na skill [testcontainers-integration-tester](.tessl/plugins/machinereturn/dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).dotnet-clean-arch/skills/testcontainers-integration-tester/SKILL.md).
 

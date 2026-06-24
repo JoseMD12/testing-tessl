@@ -25,11 +25,15 @@ dotnet_channel_installed() {
 persist_env() {
   local key="$1" value="$2"
   if [ -n "${ENVRC:-}" ]; then
-    echo "${key}=${value}" >> "$ENVRC"
+    local entry="${key}=${value}"
+    if ! { [ -f "$ENVRC" ] && grep -qF "$entry" "$ENVRC"; }; then
+      echo "$entry" >> "$ENVRC"
+    fi
   fi
   local profile="$HOME/.bashrc"
   local line="export ${key}=\"${value}\""
-  if [ -f "$profile" ] && ! grep -qF "$line" "$profile"; then
+  touch "$profile"
+  if ! grep -qF "$line" "$profile"; then
     echo "$line" >> "$profile"
   fi
 }
@@ -50,6 +54,11 @@ fi
 if command -v tessl >/dev/null 2>&1 && tessl --version 2>/dev/null | grep -qF "$TESSL_VERSION"; then
   echo "Tessl CLI ${TESSL_VERSION} already present, skipping."
 else
+  if ! command -v npm >/dev/null 2>&1; then
+    echo "Error: npm (Node.js) is required to install the Tessl CLI but was not found on PATH." >&2
+    echo "Install Node.js (which provides npm) and re-run this script." >&2
+    exit 1
+  fi
   echo "Installing Tessl CLI ${TESSL_VERSION}..."
   npm install -g "tessl@${TESSL_VERSION}"
 fi

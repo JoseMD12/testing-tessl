@@ -37,23 +37,33 @@ Exemplos válidos:
 - Garanta que o Pull Request tem a `develop` como branch de destino (base).
 - Não abra Pull Requests de branches de trabalho diretamente para a `main`.
 
-## Padrão de Título e Descrição de Pull Request (PR)
+## Padrão de Mensagens de Commit
 
-Para manter a consistência e a rastreabilidade do projeto, todos os Pull Requests devem seguir a seguinte estrutura de título e corpo:
+Para manter o histórico do Git limpo e profissional, todas as mensagens de commit devem seguir estritamente o padrão de **Conventional Commits** em inglês (sem necessidade de incluir o identificador de ticket ou prefixos adicionais no início da mensagem).
+
+- **Formato:** `<tipo>(<escopo>): <breve descrição em inglês e minúsculas>`
+- **Exemplos válidos:**
+  - `feat: setup clean architecture solution and projects`
+  - `fix(ci): upgrade gitleaks action to v3.0.0`
+  - `refac: interpolate docker-compose.yml environment variables`
+
+## Padrão de Pull Request (PR)
+
+Para manter a consistência e a rastreabilidade das revisões, todos os Pull Requests devem seguir a seguinte estrutura:
 
 ### 1. Título do PR
 
-Deve seguir o padrão de **Conventional Commits** em inglês, especificando o tipo, escopo (se aplicável), identificador do ticket e resumo em minúsculas.
+Deve seguir o padrão de **Conventional Commits** em inglês, especificando o tipo, escopo (se aplicável), identificador do ticket `MR-X` correspondente e resumo em minúsculas.
 
-- Formato: `<tipo>(<escopo>): MR-<ticket> - <breve descrição em inglês>`
-- Exemplo: `feat(ci): MR-3 - setup GitHub Actions workflows and update branch naming rules`
+- **Formato:** `<tipo>(<escopo>): MR-<ticket> - <breve descrição em inglês>`
+- **Exemplo:** `feat(ci): MR-3 - setup GitHub Actions workflows and update branch naming rules`
 
 ### 2. Corpo do PR (Descrição)
 
-O corpo do PR deve ser escrito em **Português** e ser organizado sob os seguintes cabeçalhos de Markdown:
+O corpo do PR deve ser escrito em **Português** e ser organizado obrigatoriamente sob os seguintes cabeçalhos de Markdown:
 
 - **`## Summary`**:
-  Explicação textual clara e em alto nível do propósito do PR, acompanhada de uma lista em tópicos (bullet-points) descrevendo todas as alterações técnicas significativas, refatorações, correções ou criações de arquivos.
+  Explicação textual em alto nível do propósito do PR, acompanhada de tópicos detalhando as alterações técnicas significativas ou arquivos modificados.
 
 - **`## 🧪 Como testar?`**:
-  Um passo a passo ordenado (lista numerada) e detalhado indicando como um desenvolvedor ou pipeline pode validar as alterações localmente (ex: comandos de build, testes unitários ou comandos docker).
+  Passo a passo ordenado (lista numerada) indicando como validar as alterações locais (build, testes, etc.).

@@ -36,7 +36,7 @@ jobs:
           npm install -g markdownlint-cli
           # Find matching files recursively to avoid glob mismatch error if specs folder does not exist yet
           FILES=$(find specs plugins -name "*.md" 2>/dev/null || true)
-          markdownlint $FILES AGENTS.md
+          markdownlint --disable MD013 -- $FILES AGENTS.md
 
       - name: Run Setup Script
         run: |

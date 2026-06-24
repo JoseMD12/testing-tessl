@@ -22,18 +22,20 @@ dotnet_channel_installed() {
 }
 
 # Persists an env var both for Devin blueprint runs ($ENVRC) and human shells (~/.bashrc).
+# $ENVRC is consumed as literal KEY=VALUE pairs (no shell expansion), so callers pass a
+# pre-expanded value as the optional 3rd arg; .bashrc keeps the raw value to expand on source.
 persist_env() {
-  local key="$1" value="$2"
+  local key="$1" value="$2" envrc_value="${3:-$2}"
   if [ -n "${ENVRC:-}" ]; then
-    local entry="${key}=${value}"
-    if ! { [ -f "$ENVRC" ] && grep -qF "$entry" "$ENVRC"; }; then
+    local entry="${key}=${envrc_value}"
+    if ! { [ -f "$ENVRC" ] && grep -qxF "$entry" "$ENVRC"; }; then
       echo "$entry" >> "$ENVRC"
     fi
   fi
   local profile="$HOME/.bashrc"
   local line="export ${key}=\"${value}\""
   touch "$profile"
-  if ! grep -qF "$line" "$profile"; then
+  if ! grep -qxF "$line" "$profile"; then
     echo "$line" >> "$profile"
   fi
 }
@@ -44,10 +46,10 @@ if dotnet_channel_installed; then
 else
   echo "Installing .NET SDK channel ${DOTNET_CHANNEL} into ${DOTNET_DIR}..."
   curl -sSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel "$DOTNET_CHANNEL" --install-dir "$DOTNET_DIR"
-  persist_env DOTNET_ROOT "$DOTNET_DIR"
-  persist_env PATH "${DOTNET_DIR}:\$PATH"
   export DOTNET_ROOT="$DOTNET_DIR"
   export PATH="${DOTNET_DIR}:$PATH"
+  persist_env DOTNET_ROOT "$DOTNET_DIR"
+  persist_env PATH "${DOTNET_DIR}:\$PATH" "$PATH"
 fi
 
 # 2. Tessl CLI

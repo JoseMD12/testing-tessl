@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  machinereturn-db:
+    image: postgres:16-alpine
+    container_name: machinereturn-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-machinereturn}
+      POSTGRES_HOST_AUTH_METHOD: ${DB_AUTH_METHOD:-trust}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - machinereturn-network
+
+  machinereturn-cache:
+    image: redis:7-alpine
+    container_name: machinereturn-cache
+    ports:
+      - "${CACHE_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - machinereturn-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  machinereturn-network:
+    driver: bridge

@@ -11,7 +11,8 @@ Esta habilidade orienta a criação e o scaffolding de novas funcionalidades (fe
 
 1. **Foco e Coesão (Vertical Slice):** Cada funcionalidade deve encapsular todas as suas peças (Request, Command/Query, Handler, Validator, Response) em uma única pasta dedicada na camada `Application` (ex: `Application/Features/Chamados/AbrirChamado/`).
 2. **Camada de API:**
-   - Use Minimal APIs ou rotas dedicadas em Controllers para mapear os endpoints do caso de uso.
+   - **Regra Absoluta:** O projeto `MachineReturn.API` deve utilizar exclusivamente **Minimal APIs nativas do .NET 8** (criado com `dotnet new webapi --use-controllers false`). A utilização de Controllers clássicos é estritamente proibida no ecossistema deste projeto.
+   - O mapeamento de endpoints deve ocorrer de forma descentralizada e fluida junto às fatias verticais.
    - Injete o Mediador (MediatR) para encaminhar o Request ao Handler correspondente.
 3. **Validação de Entrada:**
    - Implemente validações robustas usando FluentValidation se necessário, encapsuladas na mesma pasta da Feature.

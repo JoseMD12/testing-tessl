@@ -21,7 +21,7 @@ Considerando o nome base do sistema (ex: `MachineReturn`), os projetos C# devem 
    - **Regra de Dependência:** Depende de `[NomeDoApp].Application` e `[NomeDoApp].Domain`.
 4. **Camada de Apresentação / API (`[NomeDoApp].API.csproj`):**
    - Contém os endpoints da API (Minimal APIs ou Controllers) e injeção de dependência inicial.
-   - **Regra de Dependência:** Depende de `[NomeDoApp].Application` e `[NomeDoApp].Infra`.
+   - **Regra de Dependência:** Depende de `[NomeDoApp].Application`, `[NomeDoApp].Infra` e `[NomeDoApp].Shared`.
 5. **Camada Compartilhada (`[NomeDoApp].Shared.csproj`):**
    - Contém middlewares genéricos (como tratamento global de exceções) ou utilitários agnósticos.
    - **Regra de Dependência:** Não deve depender das camadas de negócio da aplicação.
@@ -41,7 +41,7 @@ graph TD
     Infra --> Application
     Application --> Domain[Domain]
     
-    Shared[Shared] -.-> API
+    API[Presentation/API] -.-> Shared[Shared]
 ```
 
 **Regra Absoluta:** Nunca adicione referências cíclicas ou diretas que contornem essa estrutura (ex: referenciar `API` dentro do `Domain`, ou expor dependências de banco de dados do `Infra` diretamente na camada de `Application`).

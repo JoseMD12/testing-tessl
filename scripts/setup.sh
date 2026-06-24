@@ -40,7 +40,7 @@ persist_env() {
   fi
 
   # Support GitHub Actions environment persistence
-  if [ -n "${GITHUB_ENV:-}" ]; then
+  if [ -n "${GITHUB_ENV:-}" ] && [ -n "${GITHUB_PATH:-}" ]; then
     if [ "$key" = "PATH" ]; then
       echo "$DOTNET_DIR" >> "$GITHUB_PATH"
     else

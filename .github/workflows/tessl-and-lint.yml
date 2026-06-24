@@ -10,6 +10,9 @@ on:
       - main
       - develop
 
+permissions:
+  contents: read
+
 jobs:
   quality:
     name: Lint, Secrets Scan, and Tessl Validation
@@ -27,7 +30,7 @@ jobs:
           node-version: 20
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff981064210d7039537f5979c13b3d957d186c3f # v2.3.9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

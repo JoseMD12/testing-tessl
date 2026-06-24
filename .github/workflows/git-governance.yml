@@ -33,10 +33,10 @@ jobs:
           if [ "$HEAD_BRANCH" = "develop" ] || [ "$HEAD_BRANCH" = "main" ]; then
             echo "Skipping branch naming check for standard integration branch: $HEAD_BRANCH"
           else
-            # Pattern: ^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z0-9]+(-[a-z0-9]+)*$
-            REGEX="^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z0-9]+(-[a-z0-9]+)*$"
+            # Pattern: ^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z][a-z0-9]*(-[a-z0-9]+)*$
+            REGEX="^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z][a-z0-9]*(-[a-z0-9]+)*$"
             if [[ ! "$HEAD_BRANCH" =~ $REGEX ]]; then
-              echo "::error::Branch name '$HEAD_BRANCH' does not follow the required naming pattern: ^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z0-9]+(-[a-z0-9]+)*$"
+              echo "::error::Branch name '$HEAD_BRANCH' does not follow the required naming pattern: ^(feat|fix|refac|doc|test|chore)/[A-Z0-9]+(-[A-Z0-9]+)*-[a-z][a-z0-9]*(-[a-z0-9]+)*$"
               echo "::error::Example of valid branch: feat/MR-123-create-return-request"
               exit 1
             fi

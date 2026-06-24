@@ -38,6 +38,15 @@ persist_env() {
   if ! grep -qxF "$line" "$profile"; then
     echo "$line" >> "$profile"
   fi
+
+  # Support GitHub Actions environment persistence
+  if [ -n "${GITHUB_ENV:-}" ]; then
+    if [ "$key" = "PATH" ]; then
+      echo "$DOTNET_DIR" >> "$GITHUB_PATH"
+    else
+      echo "${key}=${envrc_value}" >> "$GITHUB_ENV"
+    fi
+  fi
 }
 
 # 1. .NET 8 SDK

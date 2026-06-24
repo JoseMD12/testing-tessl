@@ -39,7 +39,8 @@ graph TD
     API[Presentation/API] --> Application[Application]
     API --> Infra[Infrastructure]
     Infra --> Application
-    Application --> Domain[Domain]
+    Infra --> Domain[Domain]
+    Application --> Domain
     
     API[Presentation/API] -.-> Shared[Shared]
 ```

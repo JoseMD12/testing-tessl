@@ -2,7 +2,7 @@ name: Git Governance
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, edited, synchronize, reopened]
 
 jobs:
   governance:
@@ -29,12 +29,17 @@ jobs:
           fi
 
           # Check 2: Validate branch naming pattern via Regex
-          # Pattern: ^(feat|fix|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$
-          REGEX="^(feat|fix|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$"
-          if [[ ! "$HEAD_BRANCH" =~ $REGEX ]]; then
-            echo "::error::Branch name '$HEAD_BRANCH' does not follow the required naming pattern: ^(feat|fix|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$"
-            echo "::error::Example of valid branch: feat/MR-123-abertura-de-chamado-de-devolucao"
-            exit 1
+          # Skip naming check for 'develop' and 'main' branches (standard integration branches)
+          if [ "$HEAD_BRANCH" = "develop" ] || [ "$HEAD_BRANCH" = "main" ]; then
+            echo "Skipping branch naming check for standard integration branch: $HEAD_BRANCH"
+          else
+            # Pattern: ^(feat|fix|refac|doc|test|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$
+            REGEX="^(feat|fix|refac|doc|test|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$"
+            if [[ ! "$HEAD_BRANCH" =~ $REGEX ]]; then
+              echo "::error::Branch name '$HEAD_BRANCH' does not follow the required naming pattern: ^(feat|fix|refac|doc|test|chore)/MR-[0-9]+-[a-zA-Z0-9_-]+$"
+              echo "::error::Example of valid branch: feat/MR-123-abertura-de-chamado-de-devolucao"
+              exit 1
+            fi
           fi
 
           echo "All governance checks passed successfully!"

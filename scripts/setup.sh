@@ -9,6 +9,18 @@ DOTNET_CHANNEL="8.0"
 TESSL_VERSION="0.87.0"
 DOTNET_DIR="${DOTNET_ROOT:-$HOME/.dotnet}"
 
+# Returns 0 if a .NET SDK matching $DOTNET_CHANNEL is available (on PATH or in $DOTNET_DIR).
+dotnet_channel_installed() {
+  local bin
+  for bin in "$(command -v dotnet 2>/dev/null)" "$DOTNET_DIR/dotnet"; do
+    [ -n "$bin" ] && [ -x "$bin" ] || continue
+    if "$bin" --list-sdks 2>/dev/null | grep -q "^${DOTNET_CHANNEL}\."; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 # Persists an env var both for Devin blueprint runs ($ENVRC) and human shells (~/.bashrc).
 persist_env() {
   local key="$1" value="$2"
@@ -23,8 +35,8 @@ persist_env() {
 }
 
 # 1. .NET 8 SDK
-if command -v dotnet >/dev/null 2>&1 || [ -x "$DOTNET_DIR/dotnet" ]; then
-  echo ".NET SDK already present, skipping."
+if dotnet_channel_installed; then
+  echo ".NET SDK ${DOTNET_CHANNEL} already present, skipping."
 else
   echo "Installing .NET SDK channel ${DOTNET_CHANNEL} into ${DOTNET_DIR}..."
   curl -sSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel "$DOTNET_CHANNEL" --install-dir "$DOTNET_DIR"
@@ -35,8 +47,8 @@ else
 fi
 
 # 2. Tessl CLI
-if command -v tessl >/dev/null 2>&1; then
-  echo "Tessl CLI already present, skipping."
+if command -v tessl >/dev/null 2>&1 && [ "$(tessl --version 2>/dev/null | head -1 | tr -d '[:space:]')" = "$TESSL_VERSION" ]; then
+  echo "Tessl CLI ${TESSL_VERSION} already present, skipping."
 else
   echo "Installing Tessl CLI ${TESSL_VERSION}..."
   npm install -g "tessl@${TESSL_VERSION}"

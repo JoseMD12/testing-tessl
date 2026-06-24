@@ -71,6 +71,18 @@ As regras de comportamento de IA e *skills* são organizadas como plugins locais
 
 ## 🚀 Como Executar e Validar (Para Agentes de IA e Humanos)
 
+### Pré-requisitos (Toolchain)
+
+Antes de tudo, instale o toolchain do projeto (.NET 8 SDK e Tessl CLI) com o script idempotente na raiz do repositório:
+
+```bash
+bash scripts/setup.sh
+```
+
+Este mesmo script é o que o ambiente da Devin AI executa automaticamente na inicialização do snapshot.
+
+### Fluxo de Validação
+
 1. **Leitura de Especificações (SDD):** Antes de qualquer tarefa de codificação, a IA deve buscar as especificações correspondentes no diretório `/specs` (ou conforme instruído pelas regras).
 2. **Sincronização de Regras:** Garanta que os plugins do Tessl estão devidamente instalados executando:
 

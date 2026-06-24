@@ -47,7 +47,7 @@ jobs:
         run: |
           npm install -g tessl
 
-      - name: Tessl Install and Validate
+      - name: Tessl Install and Diagnostics
         run: |
           tessl install
-          tessl validate
+          tessl doctor

@@ -1,6 +1,6 @@
 {
   "name": "machinereturn/dotnet-clean-arch",
   "version": "0.1.0",
-  "description": "Regras, diretrizes e habilidades para arquitetura Clean e Vertical Slice em .NET 8 usando xUnit, Moq e FluentAssertions",
+  "description": "Regras, diretrizes e habilidades para arquitetura Clean e Vertical Slice em .NET 8 usando xUnit, Moq e FluentAssertions. O versionamento de código (Git) é tratado pelo plugin git-versioning.",
   "private": true
 }

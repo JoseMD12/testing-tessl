@@ -1,6 +1,6 @@
 # Git Hygiene
 
-Manutenção de higiene de arquivos no Git para o ecossistema .NET.
+Manutenção de higiene de arquivos no Git para o repositório.
 
 ## Regras do Git
 

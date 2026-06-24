@@ -7,6 +7,9 @@
     },
     "machinereturn/dotnet-clean-arch": {
       "source": "file:plugins/dotnet-clean-arch"
+    },
+    "machinereturn/git-versioning": {
+      "source": "file:plugins/git-versioning"
     }
   }
 }

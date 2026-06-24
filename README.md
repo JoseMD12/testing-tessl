@@ -60,7 +60,8 @@ O comportamento dos agentes de IA é guiado por regras modulares instaladas pelo
 As regras de comportamento de IA e *skills* são organizadas como plugins locais no projeto:
 
 * [plugins/sdd-workflow](plugins/sdd-workflow): Workflow de Desenvolvimento Baseado em Especificações (*Spec-Driven Development*).
-* [plugins/dotnet-clean-arch](plugins/dotnet-clean-arch): Diretrizes para arquitetura limpa em .NET 8, higiene de Git, gerenciamento de segredos e aprovação de comandos.
+* [plugins/dotnet-clean-arch](plugins/dotnet-clean-arch): Diretrizes para arquitetura limpa em .NET 8, gerenciamento de segredos e aprovação de comandos.
+* [plugins/git-versioning](plugins/git-versioning): Versionamento de código com Git — nomenclatura de branches, fluxo de merge (`develop`/`main`) e higiene do repositório.
 
 ### Fontes de Regras Unificadas
 

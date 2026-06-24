@@ -14,7 +14,7 @@ Esta skill define o passo a passo operacional para versionar código com Git nes
    ```bash
    git checkout develop
    git pull origin develop
-   git checkout -b feat/MR-123-abertura-de-chamado-de-devolucao
+   git checkout -b feat/MR-123-create-return-request
    ```
 
 2. **Siga a nomenclatura obrigatória:** O nome da branch segue o formato conceitual `<operacao>/<ticket> - <descricao geral>`, materializado em *kebab-case* (`<operacao>/<ticket>-<descricao-geral>`) por causa da restrição do Git a espaços, conforme a regra `branch-and-merge-flow.md`.
@@ -22,7 +22,7 @@ Esta skill define o passo a passo operacional para versionar código com Git nes
 
 ## Commits
 
-1. **Mensagens claras e no escopo:** Escreva mensagens de commit curtas e descritivas, idealmente alinhadas ao prefixo de operação da branch (ex: `feat: implementa abertura de chamado`).
+1. **Mensagens claras e no escopo:** Escreva mensagens de commit curtas e descritivas, idealmente alinhadas ao prefixo de operação da branch (ex: `feat: create return request`).
 2. **Higiene antes do commit:** Execute `git status` e confirme que nenhum artefato de build, IDE ou runtime (`bin/`, `obj/`, `.vs/`, `.idea/`, `.tessl/`) está sendo rastreado, conforme a regra `git-hygiene.md`.
 
 ## Fluxo de Merge

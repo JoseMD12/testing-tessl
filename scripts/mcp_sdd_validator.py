@@ -144,4 +144,10 @@ def main():
             sys.stderr.flush()
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1:
+        spec_path = sys.argv[1]
+        res = validate_sdd_spec(spec_path)
+        print(json.dumps(res, indent=2))
+        sys.exit(0 if res.get("valid", False) else 1)
+    else:
+        main()

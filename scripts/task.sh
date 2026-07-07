@@ -195,6 +195,14 @@ print(path.strip())
         exit 1
       fi
 
+      # Validate the spec file using the sdd validator
+      echo "🔍 Validating spec file: $spec_path..."
+      if ! python3 scripts/mcp_sdd_validator.py "$spec_path"; then
+        echo "❌ Spec validation failed! Please correct the errors in the spec file before advancing." >&2
+        exit 1
+      fi
+      echo "✅ Spec file validation passed."
+
       # Transition: Plan -> Implement
       python3 -c "
 import sys
@@ -209,6 +217,13 @@ open(f, 'w', encoding='utf-8').write(content)
       ;;
 
     "Implement")
+      echo "🧪 Running dotnet tests to verify implementation..."
+      if ! python3 scripts/mcp_dotnet_tests.py "MachineReturn.sln"; then
+        echo "❌ Dotnet tests failed! All tests must pass before completing the task." >&2
+        exit 1
+      fi
+      echo "✅ Dotnet tests passed successfully."
+
       # Transition: Implement -> Completed
       python3 -c "
 import sys

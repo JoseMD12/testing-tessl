@@ -171,4 +171,11 @@ def main():
             sys.stderr.flush()
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1:
+        project = sys.argv[1]
+        test_filter = sys.argv[2] if len(sys.argv) > 2 else None
+        res = run_dotnet_tests(project, test_filter)
+        print(json.dumps(res, indent=2))
+        sys.exit(0 if res.get("success", False) else 1)
+    else:
+        main()

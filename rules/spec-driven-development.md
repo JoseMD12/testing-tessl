@@ -29,7 +29,8 @@ Toda tarefa de IA neste projeto deve seguir rigorosamente um ciclo de vida compo
 ## Formatação e Validação das Specs (Markdown)
 
 1. **Padrão Estético de Referência:** Toda especificação criada ou editada deve seguir a estrutura e formatação visual exemplificada no arquivo de exemplo [spec-example.md](specs/spec-example.md).
-2. **Automação do Linter:** A formatação estética (como linhas em branco e recuos) é tratada automaticamente. Antes de enviar alterações, execute a validação e correção automática através do comando:
+2. **Estrutura de Cenários BDD:** Conforme os padrões de IA-Native do projeto, todas as regras de aceitação de uma especificação devem ser estruturadas em cenários BDD formais usando as marcações **Dado / Quando / Então** (Given / When / Then), garantindo clareza técnica e facilidade para testes automatizados.
+3. **Automação do Linter:** A formatação estética (como linhas em branco e recuos) é tratada automaticamente. Antes de enviar alterações, execute a validação e correção automática através do comando:
 
    ```bash
    npx markdownlint-cli --fix --disable MD013 <caminho-do-arquivo-ou-pasta>
@@ -41,8 +42,8 @@ Toda tarefa de IA neste projeto deve seguir rigorosamente um ciclo de vida compo
 
 > [!IMPORTANT]
 > **Regra Geral aos Agentes de IA:** Qualquer alteração de configuração de IA, regra (rule) ou habilidade (skill) neste repositório deve ser realizada nos seguintes diretórios na raiz do projeto:
+>
 > - Regras (*rules*): na pasta `rules/`
 > - Habilidades (*skills*): na pasta `.agents/skills/`
 >
 > Não utilize mais comandos do Tessl (como `tessl install` ou `tessl doctor`), pois o Tessl foi removido do projeto.
-

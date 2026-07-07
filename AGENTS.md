@@ -15,6 +15,7 @@ Toda tarefa de desenvolvimento ou modificação de código de IA neste projeto d
 3. **Implement (Implementação):** O agente codifica a solução, escreve testes, garante que tudo funciona (build e testes passam), e roda linter. *Exige aprovação final do usuário rodando `./scripts/task.sh approve` para conclusão.*
 
 **Como utilizar:**
+
 - Inicializar uma task: `./scripts/task.sh init "Nome da Task"`
 - Verificar status da task: `./scripts/task.sh status`
 - Aprovar a fase atual: `./scripts/task.sh approve`
@@ -38,95 +39,17 @@ Para manter o contexto enxuto, livre de redundâncias e focado no domínio, as r
    - **Processo SDD:** A obrigatoriedade de leitura de especificações antes do início da codificação está descrita em [spec-driven-development.md](rules/spec-driven-development.md).
    - **Criação e Formato de Specs:** Regras de nomenclatura e templates obrigatórios de especificação estão delegadas à skill [sdd-spec-enforcer](.agents/skills/sdd-spec-enforcer/SKILL.md).
 
-4. **Arquitetura e Implementação:**
-   - **Estrutura da Solução:** A nomenclatura de projetos .csproj, .sln e dependências de arquitetura está descrita em [solution-structure.md](rules/solution-structure.md).
-   - **Domínio Rico (DDD):** Diretrizes para Aggregate Roots, Entities e Value Objects estão na skill [rich-domain-builder](.agents/skills/rich-domain-builder/SKILL.md).
-   - **Fatias Verticais (Vertical Slices):** Padrões para rotas da API, Command/Query Handlers e FluentValidation estão na skill [net8-vertical-slice-generator](.agents/skills/net8-vertical-slice-generator/SKILL.md).
-   - **Mapeamento e Migrações (EF Core):** Regras de configuração Fluent API e geração de migrações estão na skill [efcore-config-migration-enforcer](.agents/skills/efcore-config-migration-enforcer/SKILL.md).
-   - **Estratégias de Cache (Redis):** Diretrizes para o padrão Cache-Aside e gerenciamento de chaves no Redis estão na skill [redis-cache-manager](.agents/skills/redis-cache-manager/SKILL.md).
+4. **Tema de Domínio e Regras de Roteamento:**
+   - **Contexto de Negócio (MachineReturn):** A especificação de personas, entidades do domínio (classes ricas) e regras de triagem automática estão descritas em [domain-context.md](rules/domain-context.md).
 
-5. **Estratégia de Testes:**
-   - **Testes Unitários:** O isolamento e a modelagem com xUnit, Moq e FluentAssertions estão na skill [xunit-moq-fluentassertions-tester](.agents/skills/xunit-moq-fluentassertions-tester/SKILL.md).
-   - **Testes de Integração:** O uso de Testcontainers (PostgreSQL e Redis) com xUnit e FluentAssertions está na skill [testcontainers-integration-tester](.agents/skills/testcontainers-integration-tester/SKILL.md).
+5. **Arquitetura, Banco de Dados, Cache e Testes:**
+   - **Arquitetura e Configurações:** A nomenclatura de projetos .csproj, .sln, dependências, resiliência do banco de dados, Redis cache-aside, estratégia de testes (unitários/integração) e testes manuais (.http) estão descritos em [architecture-guide.md](rules/architecture-guide.md).
+   - **Estrutura da Solução:** A nomenclatura de projetos e o fluxo de dependências clássicas estão detalhados em [solution-structure.md](rules/solution-structure.md).
+   - **Domínio Rico (DDD):** Diretrizes de modelagem rica estão na skill [rich-domain-builder](.agents/skills/rich-domain-builder/SKILL.md).
+   - **Fatias Verticais (Vertical Slices):** Padrões para rotas da API, handlers e validações estão na skill [net8-vertical-slice-generator](.agents/skills/net8-vertical-slice-generator/SKILL.md).
+   - **Mapeamento e Migrações (EF Core):** Regras Fluent API e migrações estão na skill [efcore-config-migration-enforcer](.agents/skills/efcore-config-migration-enforcer/SKILL.md).
+   - **Estratégias de Cache (Redis):** Gerenciamento de chaves e resiliência estão na skill [redis-cache-manager](.agents/skills/redis-cache-manager/SKILL.md).
+   - **Testes Unitários:** Stack xUnit, Moq e FluentAssertions na skill [xunit-moq-fluentassertions-tester](.agents/skills/xunit-moq-fluentassertions-tester/SKILL.md).
+   - **Testes de Integração:** Testcontainers com PostgreSQL e Redis na skill [testcontainers-integration-tester](.agents/skills/testcontainers-integration-tester/SKILL.md).
 
 Antes de codificar qualquer nova funcionalidade, localize e leia a especificação correspondente (`spec-*.md`) no diretório `/specs`.
-
----
-
-### 🏢 Tema de Domínio: MachineReturn (Logística Reversa de Máquinas Corporativas)
-
-Sistema de gerenciamento de devolução de máquinas corporativas por fim de contrato ou defeito, integrando triagem automática de destino e inspeção de qualidade de hardware.
-
-#### Fluxo de Negócio e Personas
-
-1. **Abertura de Chamado (Consumidor - Sem Login):**
-   - Um consumidor abre um chamado de devolução informando apenas o **código da máquina** e o **e-mail** associado a ela.
-   - O sistema valida se o e-mail corresponde ao usuário atualmente atribuído à máquina.
-   - A devolução é motivada por: **Tempo de Aluguel Expirado** ou **Produto com Erro**.
-2. **Triagem Automática de Fábrica:**
-   - Com base no ano de fabricação, origem da máquina e número de série, o sistema calcula para qual **Fábrica Cadastrada** a máquina deve ser enviada fisicamente.
-3. **Inspeção de Qualidade (Agente de Qualidade - Com Login):**
-   - Na fábrica receptora, um Agente de Qualidade realiza a averiguação física.
-   - Ele define o **Selo de Qualidade** da máquina: `Novo`, `UsadoEmBoasCondicoes`, `Usado`, `NecessitaManutencao`, `Desmontar`, `Descartar`.
-   - Com base no selo e nas regras, o agente decide o destino operacional da máquina.
-
-#### Entidades do Domínio (Classes Ricas)
-
-- **Usuario e Perfil:** Perfis como `Consumidor` (sem acesso de login ao sistema) e `AgenteQualidade` (com login).
-- **Maquina:** Código único, número de série, ano de fabricação, país de origem, usuário atribuído atual e histórico de selos de qualidade.
-- **ChamadoDevolucao:** Ciclo de vida (`Aberto`, `EmTransito`, `Recebido`, `Inspecionado`, `Finalizado`), motivo do chamado, fábrica de destino e histórico de tramitação.
-- **Fabrica:** Nome, país e capacidade operacional.
-- **LaudoQualidade:** Resultado da averiguação do Agente de Qualidade contendo o selo atribuído e o parecer técnico.
-
-#### Regra de Roteamento (Exemplo)
-
-- **Fábrica de Destino:**
-  - Máquinas com **origem** fora das Américas e **ano de fabricação** menor que 2021 são direcionadas para a Fábrica de Descarte Internacional.
-  - Máquinas com **motivo** "Produto com Erro" e **número de série** iniciado com "CN" vão para a Fábrica de Manutenção Avançada.
-
----
-
-### 🏛️ Arquitetura do Sistema
-
-O projeto é estruturado utilizando conceitos de **Clean Architecture** combinados com **Vertical Slice Architecture** distribuídos nas seguintes camadas:
-
-1. **Domain:** Contém as entidades ricas do negócio, agregados e objetos de valor.
-   - *Diretriz:* Siga a skill [rich-domain-builder](.agents/skills/rich-domain-builder/SKILL.md) para encapsulamento das invariantes e validações.
-2. **Application:** Orquestra os casos de uso do sistema por fatias verticais (features).
-   - *Diretriz:* Siga a skill [net8-vertical-slice-generator](.agents/skills/net8-vertical-slice-generator/SKILL.md).
-3. **Infra:** Implementa a persistência de dados (PostgreSQL via EF Core) e infraestrutura de cache (Redis).
-   - *Diretriz:* Siga a skill [efcore-config-migration-enforcer](.agents/skills/efcore-config-migration-enforcer/SKILL.md) para mapeamento Fluent API e criação de migrações.
-   - *Diretriz:* Siga a skill [redis-cache-manager](.agents/skills/redis-cache-manager/SKILL.md) para cache distribuído e estratégias de invalidação.
-4. **API:** Camada de entrada (Minimal APIs/Controllers) que expõe os endpoints das fatias verticais.
-5. **Shared:** Contém o middleware de tratamento global de exceções para conversão semântica de erros (ex: `DomainException` -> HTTP 400/422).
-
----
-
-### 💾 Banco de Dados, Cache e Configurações Locais
-
-- **Banco de Dados e Cache:** Utiliza PostgreSQL (persistência de escrita) e Redis (cache distribuído).
-  - *Diretriz:* Consulte a skill [redis-cache-manager](.agents/skills/redis-cache-manager/SKILL.md) para detalhes de gerenciamento de chaves e resiliência com Redis.
-- **Orquestração Local:** A infraestrutura local é orquestrada via `docker-compose.yml` e arquivos `Dockerfile`.
-- **Dados Iniciais (Seeds):** Carga automática no banco de dados para criar um usuário administrador padrão (`admin`).
-- **Migrações (EF Core):** As migrações residem na camada `Infra` e devem ser aplicadas automaticamente na inicialização da API em desenvolvimento, conforme detalhado na skill [efcore-config-migration-enforcer](.agents/skills/efcore-config-migration-enforcer/SKILL.md).
-- **Resiliência:** Configure políticas de retry como `EnableRetryOnFailure` do EF Core para o PostgreSQL, tolerando atrasos de inicialização dos containers.
-- **Segredos e Configurações:** Siga estritamente a regra de segurança descrita em [secret-management.md](rules/secret-management.md).
-
----
-
-### 🧪 Estratégia de Testes
-
-Toda nova funcionalidade criada deve conter testes correspondentes para garantir qualidade de ponta a ponta:
-
-1. **Testes Unitários:** Focados na lógica do Domain e Application de forma isolada.
-   - *Diretriz:* Siga a skill [xunit-moq-fluentassertions-tester](.agents/skills/xunit-moq-fluentassertions-tester/SKILL.md).
-2. **Testes de Integração:** Fluxos ponta a ponta em banco e cache reais e efêmeros.
-   - *Diretriz:* Siga a skill [testcontainers-integration-tester](.agents/skills/testcontainers-integration-tester/SKILL.md).
-
----
-
-### 📞 Testes Manuais (Arquivos `.http`)
-
-- Para testes manuais rápidos na API, crie arquivos com extensão `.http` na camada de API ou no diretório `/requests` na raiz do projeto.
-- **Regra:** Crie um arquivo `.http` individual para cada seção de domínio ou Aggregate Root (ex: `requests/machine-returns.http`) para manter os testes focados por contexto.
-

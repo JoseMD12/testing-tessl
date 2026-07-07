@@ -15,37 +15,58 @@ Como portador atual de uma máquina alugada (notebook corporativo), desejo abrir
 
 ## Acceptance Criteria
 
-1. **Payload de Entrada do Chamado (`POST /api/v1/return-requests`):**
-   * Deve aceitar os seguintes campos obrigatórios:
-     * `machineCode` (string)
-     * `email` (string, formato válido)
-     * `city` (string)
-     * `reasonCode` (enum: `TempoDeAluguelExpirado`, `ProdutoComErro`)
-     * `needsCollection` (boolean)
-   * Deve aceitar campos opcionais:
-     * `description` (string, até 500 caracteres, opcional)
-     * `collectionAddress` (objeto contendo `street`, `number`, `city`, `state`, `zipCode`; obrigatório se `needsCollection` for `true`, nulo caso contrário)
+### Cenário 1: Payload de entrada inválido ao abrir chamado (Campos obrigatórios ausentes ou incorretos)
 
-2. **Validações de Domínio:**
-   * **Validação de Vínculo de Máquina:** O sistema deve consultar uma base cadastral externa simulada para verificar se o `email` informado corresponde ao usuário (CPF) atualmente atribuído ao `machineCode`. Caso não haja correspondência, deve retornar erro semântico de domínio (`422 Unprocessable Entity` ou `400 Bad Request`).
-   * **Validação de Chamado Ativo:** Uma máquina só pode possuir um único chamado de devolução ativo (Status diferente de `Finalizado`). Se já houver um chamado em andamento, deve impedir a criação retornando erro de duplicidade (`400 Bad Request`).
-   * Um mesmo usuário (portador) pode possuir múltiplos chamados ativos desde que sejam para máquinas distintas.
+Dado que um consumidor tenta abrir um chamado de devolução enviando um payload incompleto ou incorreto
+Quando a requisição `POST /api/v1/return-requests` é processada
+Então o sistema deve retornar erro de validação (HTTP 400 Bad Request) detalhando quais campos estão inválidos ou ausentes.
 
-3. **Status Inicial e Criação:**
-   * O endpoint de abertura deve responder com status `201 Created` e um objeto contendo apenas `id` (Guid), `status` (string) e `city` (string).
-   * O status inicial do chamado será:
-     * `AguardandoAgendamentoColeta` se `needsCollection` for `true`.
-     * `Criado` se `needsCollection` for `false`.
+*Campos obrigatórios: `machineCode` (string), `email` (string, formato válido), `city` (string), `reasonCode` (enum: `TempoDeAluguelExpirado`, `ProdutoComErro`), `needsCollection` (boolean).*
+*Campos opcionais: `description` (string, até 500 caracteres), `collectionAddress` (objeto contendo `street`, `number`, `city`, `state`, `zipCode`; obrigatório se `needsCollection` for `true`, nulo caso contrário).*
 
-4. **Triagem de Fábrica Assíncrona:**
-   * Ao criar o chamado, deve ser disparado o evento de domínio `ReturnRequestOpenedDomainEvent`.
-   * Um handler de evento de domínio assíncrono será responsável por disparar a regra de triagem automática e associar a fábrica de destino ao chamado.
+### Cenário 2: Validação de vínculo de máquina inválido (E-mail não correspondente)
 
-5. **Associação de Ponto de Entrega (`PATCH /api/v1/return-requests/{id}/delivery-point`):**
-   * Caso `needsCollection` seja `false` e o chamado esteja com status `Criado`, o usuário poderá associar um ponto de entrega físico através deste endpoint.
-   * O payload deve conter `deliveryPointId` (Guid, obrigatório).
-   * Após a associação bem-sucedida, o status do chamado deve transitar para `AguardandoEntrega`.
-   * Se o chamado já possuir coleta (`needsCollection == true`) ou não estiver no status `Criado`, o endpoint deve retornar erro de validação.
+Dado que um consumidor tenta abrir um chamado para a máquina com código "MAC-998877" informando o e-mail "<outro@empresa.com>"
+E a base cadastral de ativos corporativos indica que a máquina está atribuída a "<colaborador@empresa.com>"
+Quando a requisição `POST /api/v1/return-requests` é processada
+Então o sistema deve retornar um erro semântico de domínio (HTTP 400 Bad Request ou 422 Unprocessable Entity) indicando a falta de vínculo.
+
+### Cenário 3: Validação de chamado ativo em andamento (Duplicidade)
+
+Dado que a máquina "MAC-998877" já possui um chamado de devolução ativo (com status diferente de "Finalizado")
+Quando o consumidor tenta abrir um novo chamado para a mesma máquina com a requisição `POST /api/v1/return-requests`
+Então o sistema deve recusar a criação e retornar erro de duplicidade (HTTP 400 Bad Request).
+*Nota: Um mesmo usuário (portador) pode possuir múltiplos chamados ativos desde que sejam para máquinas distintas.*
+
+### Cenário 4: Abertura de chamado válida com solicitação de coleta (needsCollection = true)
+
+Dado que o consumidor informa um código de máquina "MAC-998877" e e-mail "<colaborador@empresa.com>" correspondentes na base cadastral
+E a máquina não possui chamados ativos
+E o campo `needsCollection` é definido como `true` com um `collectionAddress` válido
+Quando a requisição `POST /api/v1/return-requests` é processada
+Então o sistema deve retornar status HTTP 201 Created contendo o `id` (Guid), o status inicial "AguardandoAgendamentoColeta" e a `city` correspondente
+E deve disparar o evento de domínio `ReturnRequestOpenedDomainEvent` assincronamente para realizar a triagem de fábrica.
+
+### Cenário 5: Abertura de chamado válida para entrega em ponto físico (needsCollection = false)
+
+Dado que o consumidor informa um código de máquina "MAC-998877" e e-mail "<colaborador@empresa.com>" correspondentes na base cadastral
+E a máquina não possui chamados ativos
+E o campo `needsCollection` é definido como `false`
+Quando a requisição `POST /api/v1/return-requests` é processada
+Então o sistema deve retornar status HTTP 201 Created contendo o `id` (Guid), o status inicial "Criado" e a `city` correspondente
+E deve disparar o evento de domínio `ReturnRequestOpenedDomainEvent` assincronamente para realizar a triagem de fábrica.
+
+### Cenário 6: Associação bem-sucedida de ponto de entrega físico
+
+Dado um chamado de devolução existente com ID "7690bc4d-5872-4638-b7a4-e91b689cf912", status igual a "Criado" (needsCollection = false) e sem ponto de entrega associado
+Quando o consumidor envia uma requisição `PATCH /api/v1/return-requests/7690bc4d-5872-4638-b7a4-e91b689cf912/delivery-point` com o `deliveryPointId` (Guid)
+Então o sistema deve associar o ponto de entrega ao chamado, transitar seu status para "AguardandoEntrega" e responder com status HTTP 204 No Content.
+
+### Cenário 7: Falha ao associar ponto de entrega a chamado incompatível
+
+Dado um chamado de devolução existente com ID "7690bc4d-5872-4638-b7a4-e91b689cf912" que foi criado com needsCollection = true (status "AguardandoAgendamentoColeta")
+Quando o consumidor tenta associar um ponto de entrega físico enviando `PATCH /api/v1/return-requests/7690bc4d-5872-4638-b7a4-e91b689cf912/delivery-point`
+Então o sistema deve rejeitar a solicitação e retornar erro de validação (HTTP 400 Bad Request).
 
 ## Data Model
 

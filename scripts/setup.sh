@@ -61,7 +61,7 @@ else
 fi
 
 # 2. task.sh script validation
-chmod +x scripts/task.sh
+chmod +x scripts/*.sh scripts/*.py
 
 echo "Toolchain ready. Next: use the task harness script to manage development tasks:"
 echo "  ./scripts/task.sh init \"<Task Title>\""

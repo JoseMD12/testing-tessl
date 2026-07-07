@@ -62,11 +62,23 @@ As diretrizes e comportamentos esperados estão estruturados na raiz do projeto:
 * **Diretório [rules/](rules):** Contém regras de comportamento específicas:
   - [rules/spec-driven-development.md](rules/spec-driven-development.md): Regras do workflow de desenvolvimento baseado em especificações.
   - [rules/solution-structure.md](rules/solution-structure.md): Regras de estrutura da solução e projetos .NET 8.
+  - [rules/architecture-guide.md](rules/architecture-guide.md): Diretrizes arquiteturais, de infraestrutura, banco de dados, cache e estratégias de testes.
+  - [rules/domain-context.md](rules/domain-context.md): Regras de negócio, personas, fluxo operacional e entidades da aplicação.
   - [rules/terminal-approval-flow.md](rules/terminal-approval-flow.md): Restrições de segurança do terminal.
   - [rules/secret-management.md](rules/secret-management.md): Proteção de segredos e credenciais locais.
   - [rules/branch-and-merge-flow.md](rules/branch-and-merge-flow.md): Fluxo Git e nomenclatura de branches.
   - [rules/git-hygiene.md](rules/git-hygiene.md): Regras para `.gitignore` e arquivos do repositório.
 * **Diretório [.agents/skills/](.agents/skills):** Contém as habilidades (*skills*) que estendem as capacidades da IA no projeto (ex: gerador de vertical slices, testes de integração, etc).
+
+### 🤖 Servidores MCP Locais (Model Context Protocol)
+
+O projeto disponibiliza servidores MCP customizados em Python sob a pasta `scripts/` para expor ferramentas automatizadas aos agentes de IA:
+
+* [scripts/mcp_task_harness.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_task_harness.py): Gerenciamento e aprovação de tasks locais do Harness.
+* [scripts/mcp_dotnet_tests.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_dotnet_tests.py): Execução e reporte de testes .NET.
+* [scripts/mcp_efcore_tools.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_efcore_tools.py): Gerenciamento de migrações e comandos do Entity Framework Core.
+* [scripts/mcp_git_workflow.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_git_workflow.py): Automação de branch, commits e integridade do Git.
+* [scripts/mcp_sdd_validator.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_sdd_validator.py): Validação estática de especificações de desenvolvimento.
 
 ---
 

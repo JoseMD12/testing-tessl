@@ -15,12 +15,15 @@ As a user, I want to have a clear example of a specification document so that I 
 
 ## Acceptance Criteria
 
-1. The document must be written in Markdown.
-2. List items must follow spacing rules:
-   * First nested list item with 3 spaces indentation.
-   * Second nested list item with 3 spaces indentation:
-     * Deeply nested item with 5 spaces indentation under its parent.
-3. Blocks of code must have blank lines around them.
+### Cenário 1: Formatação do documento e recuo de listas
+
+Dado que uma especificação técnica está sendo escrita em Markdown
+Quando o linter de documentação é executado sobre o arquivo
+Então o arquivo deve seguir as regras de formatação descritas abaixo:
+
+* O documento deve estar em conformidade estética com as regras markdownlint.
+* Blocos de código devem ter linhas em branco acima e abaixo deles.
+* Itens de lista aninhados devem respeitar a indentação recomendada (ex: 3 espaços para o primeiro nível de aninhamento).
 
 ## Data Model
 

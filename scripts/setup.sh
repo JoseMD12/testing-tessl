@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
 # Bootstraps the toolchain required to work on MachineReturnProto.
-# Installs the .NET 8 SDK and the Tessl CLI. Safe to re-run (idempotent).
+# Installs the .NET 8 SDK. Safe to re-run (idempotent).
 
 set -euo pipefail
 
 DOTNET_CHANNEL="8.0"
-TESSL_VERSION="0.87.0"
 DOTNET_DIR="${DOTNET_ROOT:-$HOME/.dotnet}"
 
 # Returns 0 if a .NET SDK matching $DOTNET_CHANNEL is available (on PATH or in $DOTNET_DIR).
@@ -61,17 +60,11 @@ else
   persist_env PATH "${DOTNET_DIR}:\$PATH" "$PATH"
 fi
 
-# 2. Tessl CLI
-if command -v tessl >/dev/null 2>&1 && tessl --version 2>/dev/null | grep -qF "$TESSL_VERSION"; then
-  echo "Tessl CLI ${TESSL_VERSION} already present, skipping."
-else
-  if ! command -v npm >/dev/null 2>&1; then
-    echo "Error: npm (Node.js) is required to install the Tessl CLI but was not found on PATH." >&2
-    echo "Install Node.js (which provides npm) and re-run this script." >&2
-    exit 1
-  fi
-  echo "Installing Tessl CLI ${TESSL_VERSION}..."
-  npm install -g "tessl@${TESSL_VERSION}"
-fi
+# 2. task.sh script validation
+chmod +x scripts/task.sh
 
-echo "Toolchain ready. Next: run 'tessl install' to sync plugin rules/skills into .tessl/"
+echo "Toolchain ready. Next: use the task harness script to manage development tasks:"
+echo "  ./scripts/task.sh init \"<Task Title>\""
+echo "  ./scripts/task.sh status"
+echo "  ./scripts/task.sh approve"
+

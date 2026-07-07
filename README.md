@@ -8,10 +8,10 @@ Este repositório é um protótipo e laboratório projetado para testar e avalia
 
 Embora o projeto implemente um domínio de negócios real, seu propósito principal é duplo:
 
-1. **Parte 1: Avaliação de Skills e Rules com Tessl (Fase Atual):**
-   Testar como os modelos de IA e assistentes de codificação (como o Antigravity) interpretam, consomem e obedecem a diretrizes modulares, regras específicas e habilidades (*skills*) estruturadas e instaladas usando o ecossistema do **Tessl**.
-2. **Parte 2: Codificação com Devin AI:**
-   Validar o comportamento e eficácia de agentes totalmente autônomos de engenharia de software (especificamente o **Devin AI**) ao ler a especificação inicial, obedecer a arquitetura proposta e codificar a solução de ponta a ponta sem intervenção humana direta na lógica.
+1. **Parte 1: Avaliação de Skills e Rules com Harness de Tasks (Fase Atual):**
+   Testar como os modelos de IA e assistentes de codificação (como o Antigravity) interpretam, consomem e obedecem a diretrizes locais, regras específicas e habilidades (*skills*) estruturadas usando o Harness de Tasks de IA em 3 fases (Research, Plan e Implement).
+2. **Parte 2: Codificação Autônoma:**
+   Validar o comportamento e eficácia de agentes de engenharia de software ao ler a especificação inicial, obedecer a arquitetura proposta e codificar a solução de ponta a ponta sem intervenção humana direta na lógica, validando cada step por meio do harness.
 
 ---
 
@@ -51,22 +51,22 @@ A aplicação segue uma estrutura de **Clean Architecture** combinada com **Vert
 
 ---
 
-## 🛠️ Ecossistema Tessl & Customizações de IA
+## 🛠️ Harness de Tasks de IA & Diretrizes de IA
 
-O comportamento dos agentes de IA é guiado por regras modulares instaladas pelo [Tessl](https://tessl.io). As configurações do projeto estão mapeadas no arquivo [tessl.json](tessl.json) e as diretrizes principais em [AGENTS.md](AGENTS.md).
+O comportamento dos agentes de IA é guiado por regras locais e pelo **Harness de Tasks de IA** do projeto. As diretrizes principais estão centralizadas em [AGENTS.md](AGENTS.md).
 
-### Dependências Locais de Engenharia de Prompt (Plugins)
+### Organização de Regras e Skills (Habilidades)
 
-As regras de comportamento de IA e *skills* são organizadas como plugins locais no projeto:
+As diretrizes e comportamentos esperados estão estruturados na raiz do projeto:
 
-* [plugins/sdd-workflow](plugins/sdd-workflow): Workflow de Desenvolvimento Baseado em Especificações (*Spec-Driven Development*).
-* [plugins/dotnet-clean-arch](plugins/dotnet-clean-arch): Diretrizes para arquitetura limpa em .NET 8, gerenciamento de segredos e aprovação de comandos.
-* [plugins/git-versioning](plugins/git-versioning): Versionamento de código com Git — nomenclatura de branches, fluxo de merge (`develop`/`main`) e higiene do repositório.
-
-### Fontes de Regras Unificadas
-
-* [AGENTS.md](AGENTS.md): O hub central de regras consumido pelas IAs.
-* [.tessl/RULES.md](.tessl/RULES.md): Regras sincronizadas do Tessl que apontam para arquivos de regras de plugins individuais.
+* **Diretório [rules/](rules):** Contém regras de comportamento específicas:
+  - [rules/spec-driven-development.md](rules/spec-driven-development.md): Regras do workflow de desenvolvimento baseado em especificações.
+  - [rules/solution-structure.md](rules/solution-structure.md): Regras de estrutura da solução e projetos .NET 8.
+  - [rules/terminal-approval-flow.md](rules/terminal-approval-flow.md): Restrições de segurança do terminal.
+  - [rules/secret-management.md](rules/secret-management.md): Proteção de segredos e credenciais locais.
+  - [rules/branch-and-merge-flow.md](rules/branch-and-merge-flow.md): Fluxo Git e nomenclatura de branches.
+  - [rules/git-hygiene.md](rules/git-hygiene.md): Regras para `.gitignore` e arquivos do repositório.
+* **Diretório [.agents/skills/](.agents/skills):** Contém as habilidades (*skills*) que estendem as capacidades da IA no projeto (ex: gerador de vertical slices, testes de integração, etc).
 
 ---
 
@@ -74,24 +74,42 @@ As regras de comportamento de IA e *skills* são organizadas como plugins locais
 
 ### Pré-requisitos (Toolchain)
 
-Antes de tudo, instale o toolchain do projeto (.NET 8 SDK e Tessl CLI) com o script idempotente na raiz do repositório:
+Antes de tudo, instale o toolchain do projeto (.NET 8 SDK) e configure o harness com o script idempotente na raiz do repositório:
 
 ```bash
 bash scripts/setup.sh
 ```
 
-Este mesmo script é o que o ambiente da Devin AI executa automaticamente na inicialização do snapshot.
+### Harness de Tasks de IA (Lifecycle de 3 Steps)
 
-### Fluxo de Validação
+Toda tarefa executada por uma IA deve seguir o fluxo de steps gerenciado pelo harness local:
 
-1. **Leitura de Especificações (SDD):** Antes de qualquer tarefa de codificação, a IA deve buscar as especificações correspondentes no diretório `/specs` (ou conforme instruído pelas regras).
-2. **Sincronização de Regras:** Garanta que os plugins do Tessl estão devidamente instalados executando:
+1. **Research (Pesquisa):**
+   - Execute `./scripts/task.sh init "Nome da Task"` para criar e ativar a tarefa.
+   - Explore o código, registre notas no arquivo gerado em `tasks/task-*.md`.
+   - Peça aprovação humana rodando:
+     ```bash
+     ./scripts/task.sh approve
+     ```
+2. **Plan (Planejamento):**
+   - Projete a solução e **gere o Spec file** sob a pasta `specs/` seguindo a nomenclatura `spec-*.md`.
+   - Aponte o caminho do Spec gerado no arquivo de task.
+   - Peça aprovação humana rodando:
+     ```bash
+     ./scripts/task.sh approve
+     ```
+3. **Implement (Implementação):**
+   - Realize as alterações no código e nos testes.
+   - Certifique-se de que os testes passam e rode linters.
+   - Conclua a task e peça aprovação rodando:
+     ```bash
+     ./scripts/task.sh approve
+     ```
 
-    ```bash
-    tessl install
-    ```
+### Configuração de Ambiente e Testes
 
-3. **Configuração de Ambiente:** O projeto utiliza PostgreSQL e Redis orquestrados via `docker-compose.yml`.
-4. **Testes:**
+1. **Configuração de Ambiente:** O projeto utiliza PostgreSQL e Redis orquestrados via `docker-compose.yml`.
+2. **Testes:**
     * Testes unitários: Rodar testes focados em regras de domínio.
     * Testes de integração: Utilizam *Testcontainers* para validar operações com banco e cache reais e isolados.
+

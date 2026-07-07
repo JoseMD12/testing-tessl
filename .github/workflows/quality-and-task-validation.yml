@@ -1,4 +1,4 @@
-name: Quality and Tessl Validation
+name: Quality and Task Validation
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   quality:
-    name: Lint, Secrets Scan, and Tessl Validation
+    name: Lint, Secrets Scan, and Task Setup Validation
     runs-on: ubuntu-latest
 
     steps:
@@ -37,8 +37,8 @@ jobs:
       - name: Install and Run markdownlint
         run: |
           npm install -g markdownlint-cli
-          # Find matching files recursively to avoid glob mismatch error if specs folder does not exist yet
-          FILES=$(find specs plugins -name "*.md" 2>/dev/null || true)
+          # Find matching files recursively to avoid glob mismatch error if folders do not exist
+          FILES=$(find specs rules tasks .agents/skills -name "*.md" 2>/dev/null || true)
           markdownlint --disable MD013 -- $FILES AGENTS.md
 
       - name: Run Setup Script
@@ -46,8 +46,3 @@ jobs:
           chmod +x ./scripts/setup.sh
           ./scripts/setup.sh
 
-
-      - name: Tessl Install and Diagnostics
-        run: |
-          tessl install
-          tessl doctor

@@ -23,9 +23,12 @@ Esta skill define o passo a passo operacional para versionar código com Git nes
 ## Commits
 
 1. **Mensagens claras e no escopo:** Escreva mensagens de commit curtas e descritivas, idealmente alinhadas ao prefixo de operação da branch (ex: `feat: create return request`).
-2. **Higiene antes do commit:** Execute `git status` e confirme que nenhum artefato de build, IDE ou runtime (`bin/`, `obj/`, `.vs/`, `.idea/`, `.tessl/`) está sendo rastreado, conforme a regra `git-hygiene.md`.
+2. **Higiene antes do commit:** Execute `git status` e confirme que nenhum artefato de build, IDE ou runtime (`bin/`, `obj/`, `.vs/`, `.idea/`, `tasks/.active`) está sendo rastreado, conforme a regra `git-hygiene.md`.
+3. **Revisão de documentação:** Se os commits forem de uma alteração que fará parte de um PR, revise e atualize o arquivo `README.md` na raiz para garantir que as alterações estejam descritas.
 
 ## Fluxo de Merge
+
+*Aviso de segurança: Antes de qualquer operação relacionada a Pull Requests (abertura, reabertura, fechamento, merge, adição de novos commits ou revisão de código), revise o arquivo `README.md` na raiz do projeto para manter a documentação atualizada.*
 
 1. **Branch de trabalho para `develop`:** Abra um Pull Request com a `develop` como branch de destino. Toda branch de operação integra exclusivamente na `develop`.
 2. **Nunca abra PR de branch de trabalho para `main`:** A `main` não recebe merges diretos de branches de trabalho.
@@ -35,5 +38,6 @@ Esta skill define o passo a passo operacional para versionar código com Git nes
 
 - A branch foi criada a partir da `develop` e segue a nomenclatura obrigatória.
 - O Pull Request aponta para a `develop` como destino (nunca `main`).
+- O arquivo `README.md` na raiz do projeto foi revisado e está devidamente atualizado.
 - Nenhum artefato indevido está sendo versionado (`git status` limpo).
 - A promoção para `main` aguarda aprovação explícita do responsável.

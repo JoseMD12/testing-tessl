@@ -1,6 +1,0 @@
-{
-  "name": "machinereturn/git-versioning",
-  "version": "0.1.0",
-  "description": "Regras e habilidades para versionamento de código com Git: nomenclatura de branches, fluxo de merge (develop/main) e higiene do repositório",
-  "private": true
-}

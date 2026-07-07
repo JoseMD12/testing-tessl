@@ -1,6 +1,0 @@
-{
-  "name": "machinereturn/sdd-workflow",
-  "version": "0.1.0",
-  "description": "Regras e habilidades para o fluxo de desenvolvimento guiado por especificações (Spec-Driven Development)",
-  "private": true
-}

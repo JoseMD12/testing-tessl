@@ -36,8 +36,8 @@ TestResults/
 # 2. Ferramentas de Desenvolvimento / IDEs
 # ------------------------------------------
 
-# Tessl
-.tessl/
+# AI Task Harness
+tasks/.active
 
 # Visual Studio Code
 .vscode/*

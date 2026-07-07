@@ -36,6 +36,7 @@ Exemplos válidos:
 - Confirme que a branch foi criada a partir da `develop` e segue a nomenclatura obrigatória.
 - Garanta que o Pull Request tem a `develop` como branch de destino (base).
 - Não abra Pull Requests de branches de trabalho diretamente para a `main`.
+- **Revisão Obrigatória do README.md:** Revise e atualize obrigatoriamente o arquivo `README.md` na raiz do projeto antes de qualquer operação em PR (abertura, reabertura, fechamento, merge, adição de commits ou revisão), assegurando que todas as mudanças sejam documentadas adequadamente.
 
 ## Padrão de Mensagens de Commit
 
@@ -67,3 +68,7 @@ O corpo do PR deve ser escrito em **Português** e ser organizado obrigatoriamen
 
 - **`## 🧪 Como testar?`**:
   Passo a passo ordenado (lista numerada) indicando como validar as alterações locais (build, testes, etc.).
+
+## 📖 Sincronização do README.md em Operações de PR
+
+Antes de realizar qualquer operação de PR (abertura, reabertura, fechamento, merge, commits adicionais ou revisão de código), a IA deve ler e revisar o arquivo `README.md` na raiz do projeto, editando-o se necessário para que as instruções técnicas, novas features, pré-requisitos de ambiente e diagramas estejam rigorosamente atualizados com as alterações em andamento.

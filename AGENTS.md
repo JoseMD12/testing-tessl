@@ -10,9 +10,9 @@ Este projeto segue uma abordagem AI-Native combinada com SDD (Schema/Spec Driven
 
 Toda tarefa de desenvolvimento ou modificação de código de IA neste projeto deve seguir rigorosamente o ciclo de vida de 3 passos:
 
-1. **Research (Pesquisa):** O agente explora o codebase, localiza dependências e arquivos a serem alterados, e detalha suas descobertas nas "Research Notes" da task. *Exige aprovação do usuário rodando `./scripts/task.sh approve` para avançar.*
-2. **Plan (Planejamento):** O agente projeta a arquitetura da solução e **gera o arquivo de especificação (`specs/spec-*.md`)**. O caminho do spec deve ser apontado no arquivo da task. *Exige aprovação do usuário rodando `./scripts/task.sh approve` para avançar.*
-3. **Implement (Implementação):** O agente codifica a solução, escreve testes, garante que tudo funciona (build e testes passam), e roda linter. *Exige aprovação final do usuário rodando `./scripts/task.sh approve` para conclusão.*
+1. **Research (Pesquisa):** O agente explora o codebase e localiza dependências. *Obrigatório:* Se a análise for longa (mais de 50 linhas), crie a pasta `tasks/<task-id>/` (usando o `TASK_ID` correspondente à tarefa) e escreva o detalhamento em `tasks/<task-id>/research-notes.md`, mantendo apenas o resumo e o link relativo em `tasks/task-*.md`. *Exige aprovação do usuário rodando `./scripts/task.sh approve` para avançar.*
+2. **Plan (Planejamento):** O agente projeta a arquitetura da solução e **gera o arquivo de especificação (`specs/spec-*.md`)**. O caminho do spec deve ser apontado de forma relativa no arquivo da task. *Exige aprovação do usuário rodando `./scripts/task.sh approve` para avançar.*
+3. **Implement (Implementação):** O agente codifica as alterações e escreve testes. *Obrigatório:* Salve logs de testes e compilação em `tasks/<task-id>/test-results.log` (criando a pasta de ID correspondente se não existir), mantendo na seção de evidências apenas o resumo e o link relativo. *Exige aprovação final do usuário rodando `./scripts/task.sh approve` para conclusão.*
 
 **Como utilizar:**
 

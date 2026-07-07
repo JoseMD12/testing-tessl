@@ -94,6 +94,19 @@ def validate_sdd_spec(spec_path):
     if not bdd_found:
         errors.append("Spec does not seem to contain BDD scenarios (needs Given/When/Then or Dado/Quando/Então syntax).")
         
+    # 3. Check for absolute paths (to prevent absolute links in markdown)
+    abs_path_patterns = [
+        r"file:///mnt/",
+        r"file:///home/",
+        r"file:///[a-zA-Z]:",  # Windows absolute file links
+        r"/\bmnt/c\b",          # WSL style path references
+        r"/\bhome/[a-zA-Z0-9]"   # Linux style path references
+    ]
+    for pat in abs_path_patterns:
+        if re.search(pat, content, re.IGNORECASE):
+            errors.append("Spec contains absolute paths or absolute file:// links. Please use relative paths instead.")
+            break
+
     return {
         "valid": len(errors) == 0,
         "errors": errors,

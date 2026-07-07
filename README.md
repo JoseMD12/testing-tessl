@@ -74,11 +74,11 @@ As diretrizes e comportamentos esperados estão estruturados na raiz do projeto:
 
 O projeto disponibiliza servidores MCP customizados em Python sob a pasta `scripts/` para expor ferramentas automatizadas aos agentes de IA:
 
-* [scripts/mcp_task_harness.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_task_harness.py): Gerenciamento e aprovação de tasks locais do Harness.
-* [scripts/mcp_dotnet_tests.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_dotnet_tests.py): Execução e reporte de testes .NET.
-* [scripts/mcp_efcore_tools.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_efcore_tools.py): Gerenciamento de migrações e comandos do Entity Framework Core.
-* [scripts/mcp_git_workflow.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_git_workflow.py): Automação de branch, commits e integridade do Git.
-* [scripts/mcp_sdd_validator.py](file:///mnt/c/Users/jose.dotta/Documents/Projects/SDD-Usage/MachineReturnProto/scripts/mcp_sdd_validator.py): Validação estática de especificações de desenvolvimento.
+* [scripts/mcp_task_harness.py](scripts/mcp_task_harness.py): Gerenciamento e aprovação de tasks locais do Harness.
+* [scripts/mcp_dotnet_tests.py](scripts/mcp_dotnet_tests.py): Execução e reporte de testes .NET.
+* [scripts/mcp_efcore_tools.py](scripts/mcp_efcore_tools.py): Gerenciamento de migrações e comandos do Entity Framework Core.
+* [scripts/mcp_git_workflow.py](scripts/mcp_git_workflow.py): Automação de branch, commits e integridade do Git.
+* [scripts/mcp_sdd_validator.py](scripts/mcp_sdd_validator.py): Validação estática de especificações de desenvolvimento.
 
 ---
 

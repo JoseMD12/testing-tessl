@@ -20,6 +20,14 @@ Toda tarefa de desenvolvimento ou modificação de código de IA neste projeto d
 - Verificar status da task: `./scripts/task.sh status`
 - Aprovar a fase atual: `./scripts/task.sh approve`
 
+#### 🔄 Retomada de Contexto (Bootstrapping do Agente)
+
+Sempre que iniciar uma nova conversa ou sessão de trabalho, o Agente de IA deve obrigatoriamente:
+
+1. **Verificar se há uma task ativa:** Ler o conteúdo do arquivo local [tasks/.active](tasks/.active) ou rodar `./scripts/task.sh status` (ou a ferramenta MCP `harness_get_status`).
+2. **Carregar o estado da task:** Ler o arquivo markdown da tarefa ativa (ex: `tasks/task-*.md`) para identificar a fase atual (`Research`, `Plan` ou `Implement`), as "Research Notes" registradas e o Spec linkado.
+3. **Retomar o trabalho:** Prosseguir a partir das pendências identificadas no checklist de fases, evitando refazer análises ou pesquisas já concluídas.
+
 ---
 
 ### 🧭 Roteamento de Diretrizes (Hub de IA)
